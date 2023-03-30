@@ -3,26 +3,25 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import {useState} from 'react';
 import NearestSafeSpot from './NearestSafeSpot';
+import axios from 'axios'
 
  export default function Sos ({navigation}) {
   const [phone1,setPhone1]=useState("");
   const [phone2,setPhone2]=useState("");
   const saveNumbers = async () => {
     try {
-        await  fetch(("http://localhost:3010/sendMessage"),{
+      // await axios.get("http://10.0.2.2:3010/").then(data => console.log(data.data))
+        await  fetch(("http://10.0.2.2:3010/sendMessage"),{
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ph1: `${phone1}` })
       })
-            .then(response => {
-                response.json()
-                    .then(() => {
-                        Alert.alert("Data sent to backend");
-                    });
+            .then((res) => {
+                      console.log(res.data);
             })
     }
     catch (error) {
-        console.error(error);
+        console.log("Error");
     }
 }
   
