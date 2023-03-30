@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Safe Stride",
-    "slug": "MobileApp",
+    "slug": "safestride",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/SafeStrideLogo.png",
@@ -21,10 +21,32 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCxQcWdwhGqMP8WriVlgkiFiUj34JFAiZY"
+        }
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d6a59235-70e4-4498-b146-c16c26a056e5"
+      }
+    },
+    "owner": "siddhantrao",
+  
+    "expo": {
+      "plugins": [
+        [
+          "expo-location",
+          {
+            "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+          }
+        ]
+      ]
     }
   }
 }
