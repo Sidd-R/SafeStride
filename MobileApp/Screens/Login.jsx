@@ -19,7 +19,7 @@ const firebaseConfig = {
 // const auth = firebase.auth();
 // const db = firebase.firestore();
 
-export default function Login() {
+export default function Login({navigation}) {
 	let db
   useEffect(() => {
 		const app = initializeApp(firebaseConfig)
@@ -31,10 +31,11 @@ export default function Login() {
   const [error, setError] = useState('');
 
   const handleLogin = async () => { 
-    const users = collection(db,'users')
-    const usercred = await getDocs(users)
-    const temp = usercred.docs.map(doc => doc.data());
-    console.log(temp);
+    // const users = collection(db,'users')
+    // const usercred = await getDocs(users)
+    // const temp =  usercred.docs.map(doc => doc.data());
+    // console.log(temp);
+		navigation.navigate('Home')
   };
 
   return (

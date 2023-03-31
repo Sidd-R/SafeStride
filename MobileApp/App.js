@@ -37,16 +37,17 @@ import Login from './Screens/Login';
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
-function MainStackNavigator() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name='home' component={Home} options={{title:"Home",animation:"flip"}}/>
-      <Stack.Screen name='nearestsf' component={NearestSafeSpot} options={{title:"Nearest Safe Spot"}}/>
-      <Stack.Screen name='safestroute' component={SafestRoute} options={{title:"Safest Route"}}/>
-      <Stack.Screen name='sos' component={Sos} options={{title:"S.O.S"}}/>
-    </Stack.Navigator>
-  );
-}
+// function MainStackNavigator() {
+//   return (
+//     <Stack.Navigator>
+//       <Stack.Screen name='home' component={Home} options={{title:"Home",animation:"flip"}}/>
+//       <Stack.Screen name='nearestsf' component={NearestSafeSpot} options={{title:"Nearest Safe Spot"}}/>
+//       <Stack.Screen name='safestroute' component={SafestRoute} options={{title:"Safest Route"}}/>
+//       <Stack.Screen name='sos' component={Sos} options={{title:"S.O.S"}}/>
+//       <Stack.Screen name='login' component={Login} options={{title:"Login"}}/>
+//     </Stack.Navigator>
+//   );
+// }
 
 export default function App() {
   return (

@@ -9,6 +9,7 @@ import axios from 'axios'
   const [phone1,setPhone1]=useState("");
   const [phone2,setPhone2]=useState("");
   const saveNumbers = async () => {
+    navigation.navigate('Home')
     try {
       // await axios.get("http://10.0.2.2:3010/").then(data => console.log(data.data))
         await  fetch(("http://10.0.2.2:3010/sendMessage"),{
