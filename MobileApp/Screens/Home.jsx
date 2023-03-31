@@ -5,17 +5,17 @@ export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <TouchableOpacity onPress={() => navigation.navigate('nearestsf')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Nearest Safe Spot')}>
           <Text style={styles.cardTitle}>Nearest Safe Spot</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.card}>
-        <TouchableOpacity onPress={() => navigation.navigate('safestroute')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Safest Route')}>
           <Text style={styles.cardTitle}>Safest Route</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.card}>
-        <TouchableOpacity onPress={() => navigation.navigate('sos')}>
+        <TouchableOpacity onPress={() => navigation.navigate('S.O.S')}>
           <Text style={styles.cardTitle}>S O S</Text>
         </TouchableOpacity>
       </View>
