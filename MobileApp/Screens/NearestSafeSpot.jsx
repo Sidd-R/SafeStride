@@ -25,9 +25,9 @@ export default function App() {
       setlong(longitude)
 
       console.log(latitude, longitude);
-
+                                                                   // location=19.4065, 72.8338
       const response = await axios.get(
-        // `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=19.4065, 72.8338&radius=${NEARBY_SEARCH_RADIUS}&type=hindu_temple&key=${GOOGLE_MAPS_API_KEY}`
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${NEARBY_SEARCH_RADIUS}&type=hospital&key=${GOOGLE_MAPS_API_KEY}`
       );
 
       // console.log(response);
@@ -48,8 +48,10 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Find Nearby Hospitals{lat} long </Text>
-      <Text style={styles.heading}>Latitude: {lat} Longitude: {long}</Text>
+      <Text style={styles.heading}>Find Nearby Hospitals</Text>
+      <Text style={styles.heading}>Latitude: {lat} </Text>
+      <Text style={styles.heading}>Longitude: {long} </Text>
+      
       <FlatList
         data={hospitals}
         keyExtractor={(item) => item.address}
