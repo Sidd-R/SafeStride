@@ -67,7 +67,7 @@ const Map = () => {
               });
             }}
             onError={(errorMessage) => {
-              // console.log('GOT AN ERROR');
+               console.log('GOT AN ERROR');
             }}
           />
         ))}
