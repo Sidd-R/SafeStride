@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
+import { GOOGLE_MAPS_API_KEY } from '@env';
 
 const origin = {latitude: 28.6692, longitude: 77.107};
 const destination = {latitude: 28.5355, longitude: 77.2649};
@@ -28,7 +29,9 @@ const Map = () => {
       longitudeDelta: 0.0421,
     });
   }, []);
-  const key="AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY"
+
+  const key=GOOGLE_MAPS_API_KEY
+  
   return (
     <View style={styles.container}>
       <MapView

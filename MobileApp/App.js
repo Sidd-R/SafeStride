@@ -54,7 +54,16 @@ export default function App() {
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home">
         {/* <Drawer.Screen name="Home" component={MainStackNavigator} /> */}
-        <Drawer.Screen name="Home" component={Home} />
+        <Drawer.Screen name="Home" component={Home} 
+        options={{
+          title:"hme",
+          headerStyle:{
+            backgroundColor: 'lightblue',
+            height:100,  
+          },
+          headerStatusBarHeight:25,
+          headerTintColor:'darkgrey'
+        }}/>
         <Drawer.Screen name="Nearest Safe Spot" component={NearestSafeSpot} />
         <Drawer.Screen name="Safest Route" component={SafestRoute} />
         <Drawer.Screen name="S.O.S" component={Sos} />

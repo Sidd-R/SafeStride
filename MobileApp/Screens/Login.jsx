@@ -2,22 +2,16 @@ import { useState,useEffect } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+import {DATABASE_API_KEY} from '@env'
 
-
-// import 'firebase/auth';
-// import 'firebase/firestore';
 const firebaseConfig = {
-    apiKey: "AIzaSyC1tpseNHoWw9ksSlopxOWCFB4LvBY-qi0",
-    authDomain: "safestride-655dd.firebaseapp.com",
-    projectId: "safestride-655dd",
-    storageBucket: "safestride-655dd.appspot.com",
-    messagingSenderId: "485999909084",
-    appId: "1:485999909084:web:8f37313fe268cf3f6b7c19"
-  };
-
-
-// const auth = firebase.auth();
-// const db = firebase.firestore();
+  apiKey: DATABASE_API_KEY,
+  authDomain: "safestride-655dd.firebaseapp.com",
+  projectId: "safestride-655dd",
+  storageBucket: "safestride-655dd.appspot.com",
+  messagingSenderId: "485999909084",
+  appId: "1:485999909084:web:8f37313fe268cf3f6b7c19"
+};
 
 export default function Login({navigation}) {
 	let db

@@ -1,45 +1,106 @@
-import { StyleSheet, Text, View, Button, TextInput,Alert } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import {useState} from 'react';
+import {useState,useEffect} from 'react';
 import NearestSafeSpot from './NearestSafeSpot';
 import axios from 'axios'
 
  export default function Sos ({navigation}) {
   const [phone1,setPhone1]=useState("");
   const [phone2,setPhone2]=useState("");
-  const saveNumbers = async () => {
-    navigation.navigate('Home')
+  const sendSOS = async () => {
     try {
-      // await axios.get("http://10.0.2.2:3010/").then(data => console.log(data.data))
-        await  fetch(("http://10.0.2.2:3010/sendMessage"),{
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+        myHeaders.append("Authorization", "Basic QUM4NWNjNzRhNGE0NDBiZmNkODJhODdhZjM3MzllNmFhZDozYTc2OGJkZDE5NDMwYjY5ODkzZjMxYmNjNDE5M2E2Ng==");
+
+        var details = {
+          'Body': 'msg from frntd',
+          'To': '+917021746420',
+          'From': '+15855952432'
+        }
+
+        var formBody = [];
+        for (var property in details) {
+          var encodedKey = encodeURIComponent(property);
+          var encodedValue = encodeURIComponent(details[property]);
+          formBody.push(encodedKey + "=" + encodedValue);
+        }
+        formBody = formBody.join("&");
+
+        var requestOptions = {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ph1: `${phone1}` })
-      })
-            .then((res) => {
-                      console.log(res.data);
-            })
+          headers: myHeaders,
+          body: formBody
+      };
+
+      // fetch("https://api.twilio.com/2010-04-01/Accounts/AC85cc74a4a440bfcd82a87af3739e6aad/Messages.json", requestOptions)
+      //   .then(response => response.text())
+      //   .then(result => console.log(result))
+      //   .catch(error => console.log('error', error));
+      console.log('sos snet');
+      
+
     }
     catch (error) {
         console.log("Error");
     }
 }
+  const [sosRequested, setSosRequested] = useState(false);
+  const [secondsLeft, setSecondsLeft] = useState(0);
+  const [sosSent, setSosSent] = useState(false)
+  const [buttonbg, setButtonbg] = useState('#D12222')
+
+  useEffect(() => {
+    let timeoutId = null;
+    if (sosRequested) {
+      timeoutId = setTimeout(() => {
+        // Send SOS request here
+        setSosRequested(false);
+        setSecondsLeft(0);
+        sendSOS()
+        setSosSent(true)
+        setButtonbg('green')
+      }, 5000);
+    }
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [sosRequested]);
+
+  const handleSosPress = () => {
+    if (sosRequested) {
+      setSosRequested(false);
+      console.log('Cancelled SOS request');
+      setSecondsLeft(0);
+    } else {
+      setSosRequested(true);
+      console.log('SOS requested');
+      setSecondsLeft(5);
+    }
+  };
+
+  useEffect(() => {
+    let timerId = null;
+    if (sosRequested && secondsLeft > 0) {
+      timerId = setInterval(() => {
+        setSecondsLeft((prevSeconds) => prevSeconds - 1);
+      }, 1000);
+    }
+    return () => {
+      clearInterval(timerId);
+    };
+  }, [sosRequested, secondsLeft]);
   
   return(
     <View style={styles.container}>
-      <Text >Enter two numbers for emergency contact</Text>
-      <TextInput placeholder='Enter number 1' 
-      style={styles.input}
-      onChangeText={(phone)=>setPhone1(phone)}/>
-      <TextInput placeholder='Enter number 2' 
-      style={styles.input}
-      onChangeText={(phone)=>setPhone2(phone)}/>
-      <Button
-        title="Press me"
-        onPress={saveNumbers}
-      />
-      <StatusBar style="auto" />
+      <TouchableOpacity style={[styles.sosButton,{backgroundColor:buttonbg},]} onPress={handleSosPress} disabled={sosSent}>
+        <Text style={styles.sosButtonText} >{sosRequested ? 'CANCEL' : sosSent?"SENT":'SOS'}</Text>
+      </TouchableOpacity>
+      {sosRequested && (
+        <View style={styles.timerContainer}>
+          <Text style={styles.timerText}>{secondsLeft} seconds left</Text>
+        </View>
+      )}
     </View>
   )
 }
@@ -47,8 +108,19 @@ import axios from 'axios'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  sosButton: {
+    width: Dimensions.get('window').width*0.8,
+    height: Dimensions.get('window').width*0.8,
+    borderRadius: Dimensions.get('window').width*0.8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sosButtonText: {
+    color: '#FFFFFF',
+    fontSize: 56,
+    fontWeight: 'bold',
   },
 });

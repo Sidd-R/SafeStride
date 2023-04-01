@@ -8,6 +8,8 @@ const NEARBY_SEARCH_RADIUS = 5000; // Search radius in meters
 
 export default function App() {
   const [hospitals, setHospitals] = useState([]);
+  const [lat, setLat] = useState(0)
+  const [long, setlong] = useState(0)
 
   useEffect(() => {
     (async () => {
@@ -19,11 +21,13 @@ export default function App() {
 
       let location = await Location.getCurrentPositionAsync({});
       let { latitude, longitude } = location.coords;
+      setLat(latitude)
+      setlong(longitude)
 
       console.log(latitude, longitude);
 
       const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=19.4065, 72.8338&radius=${NEARBY_SEARCH_RADIUS}&type=hindu_temple&key=${GOOGLE_MAPS_API_KEY}`
+        // `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=19.4065, 72.8338&radius=${NEARBY_SEARCH_RADIUS}&type=hindu_temple&key=${GOOGLE_MAPS_API_KEY}`
       );
 
       // console.log(response);
@@ -44,7 +48,8 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Find Nearby Hospitals</Text>
+      <Text style={styles.heading}>Find Nearby Hospitals{lat} long </Text>
+      <Text style={styles.heading}>Latitude: {lat} Longitude: {long}</Text>
       <FlatList
         data={hospitals}
         keyExtractor={(item) => item.address}
