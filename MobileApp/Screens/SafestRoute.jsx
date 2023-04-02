@@ -31,7 +31,7 @@ const Map = () => {
   }, []);
 
   const key=GOOGLE_MAPS_API_KEY
-  
+
   return (
     <View style={styles.container}>
       <MapView
@@ -43,7 +43,7 @@ const Map = () => {
         <Marker coordinate={origin} />
         <Marker coordinate={destination} />
 
-        {routes.map((route, index) => (
+        {/* {routes.map((route, index) => (
           <MapViewDirections
             key={index}
             origin={route.origin}
@@ -73,15 +73,15 @@ const Map = () => {
                console.log('GOT AN ERROR');
             }}
           />
-        ))}
+        ))} */}
 
         <Polyline
           coordinates={[
             {latitude: 28.6692, longitude: 77.107},
             {latitude: 28.5355, longitude: 77.2649},
           ]}
-          strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
-          strokeWidth={6}
+          strokeColor="#444" // fallback for when `strokeColors` is not supported by the map-provider
+          strokeWidth={3}
         />
       </MapView>
     </View>
