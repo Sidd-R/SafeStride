@@ -26,12 +26,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra": {
-      "eas": {
-        "projectId": "d6a59235-70e4-4498-b146-c16c26a056e5"
-      }
-    },
-    "owner": "siddhantrao",
+   
   
     "expo": {
       "plugins": [

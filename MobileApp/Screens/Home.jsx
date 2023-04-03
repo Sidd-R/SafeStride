@@ -5,7 +5,7 @@ export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <TouchableOpacity onPress={() => navigation.navigate('Nearest Safe Spot')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Nearest Safe Spot',{navigation})}>
           <Text style={styles.cardTitle}>Nearest Safe Spot</Text>
         </TouchableOpacity>
       </View>
@@ -37,8 +37,11 @@ const styles = StyleSheet.create({
     marginTop: 0,
     margin: 20,
     // marginBottom: 20,
-    backgroundColor: 'lightblue',
+    //backgroundColor: 'lightblue',
     borderRadius: 10,
+    borderColor: 'lightblue',
+    borderWidth: 2,
+    borderBottomWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },

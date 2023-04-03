@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
-import { GOOGLE_MAPS_API_KEY } from '@env';
+const GOOGLE_MAPS_API_KEY='AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
 
 const origin = {latitude: 28.6692, longitude: 77.107};
 const destination = {latitude: 28.5355, longitude: 77.2649};
@@ -50,7 +50,7 @@ const Map = () => {
             destination={route.destination}
             apikey={key}
             strokeWidth={3}
-            strokeColor="#FF0000"
+            strokeColor="black"
             optimizeWaypoints={true}
             onStart={(params) => {
               console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
@@ -75,14 +75,6 @@ const Map = () => {
           />
         ))}
 
-        <Polyline
-          coordinates={[
-            {latitude: 28.6692, longitude: 77.107},
-            {latitude: 28.5355, longitude: 77.2649},
-          ]}
-          strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
-          strokeWidth={6}
-        />
       </MapView>
     </View>
   );
@@ -100,3 +92,13 @@ const styles = StyleSheet.create({
 });
 
 export default Map
+
+
+/*<Polyline
+          coordinates={[
+            {latitude: 28.6692, longitude: 77.107},
+            {latitude: 28.5355, longitude: 77.2649},
+          ]}
+          strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
+          strokeWidth={6}
+        /> */

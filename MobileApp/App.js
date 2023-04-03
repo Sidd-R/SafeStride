@@ -32,6 +32,7 @@ import NearestSafeSpot from './Screens/NearestSafeSpot';
 import SafestRoute from './Screens/SafestRoute';
 import Sos from './Screens/Sos';
 import Login from './Screens/Login';
+import DirectSpot from './Screens/DirectSpot';
 
 // Navigation
 const Drawer = createDrawerNavigator();
@@ -68,6 +69,7 @@ export default function App() {
         <Drawer.Screen name="Safest Route" component={SafestRoute} />
         <Drawer.Screen name="S.O.S" component={Sos} />
         <Drawer.Screen name="Login" component={Login} />
+        <Drawer.Screen name="DirectSpot" component={DirectSpot} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
