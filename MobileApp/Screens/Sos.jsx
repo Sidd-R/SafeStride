@@ -38,7 +38,7 @@ export default function Sos ({navigation}) {
       const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
 
 
-      await axios.get(uri+'/sendMessage').then(data => console.log(data.data)).catch(err => console.error(err))
+      // await axios.get(uri+'/sendMssage').then(data => console.log(data.data)).catch(err => console.error(err))
       
 
       //  await fetch("https://api.twilio.com/2010-04-01/Accounts/AC85cc74a4a440bfcd82a87af3739e6aad/Messages.json", requestOptions)
