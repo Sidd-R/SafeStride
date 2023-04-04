@@ -14,6 +14,7 @@ app.listen('3010',(req,res)=>{
 })
 
 app.get("/",(req,res)=>{
+  console.log("got requesttt");
     res.send("The first request from server")
 })
 

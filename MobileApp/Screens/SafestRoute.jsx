@@ -75,8 +75,6 @@ const Map = () => {
           />
         ))} */}
 
-<<<<<<< HEAD
-=======
         <Polyline
           coordinates={[
             {latitude: 28.6692, longitude: 77.107},
@@ -85,7 +83,6 @@ const Map = () => {
           strokeColor="#444" // fallback for when `strokeColors` is not supported by the map-provider
           strokeWidth={3}
         />
->>>>>>> e6636a223b6a1195bc8617aaebdc8d1b9e98a7c7
       </MapView>
     </View>
   );

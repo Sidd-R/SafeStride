@@ -1,31 +1,15 @@
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions, ToastAndroid } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import {useState,useEffect} from 'react';
-<<<<<<< HEAD
 import * as Location from 'expo-location';
 import NearestSafeSpot from './NearestSafeSpot';
 import axios from 'axios'
-=======
->>>>>>> e6636a223b6a1195bc8617aaebdc8d1b9e98a7c7
+import Constants from "expo-constants";
 
 export default function Sos ({navigation}) {
 
   const sendSOS = async () => {
     try {
-<<<<<<< HEAD
-      
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-        myHeaders.append("Authorization", "Basic QUM4NWNjNzRhNGE0NDBiZmNkODJhODdhZjM3MzllNmFhZDozYTc2OGJkZDE5NDMwYjY5ODkzZjMxYmNjNDE5M2E2Ng==");
-        let location = await Location.getCurrentPositionAsync({});
-        let { latitude, longitude } = location.coords;
-        var details = {
-
-          'Body': `I am in danger. My current location is ${latitude},${longitude}`,
-          'To': '+917021746420',
-          'From': '+15855952432'
-        }
-=======
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
       myHeaders.append("Authorization", "Basic QUM4NWNjNzRhNGE0NDBiZmNkODJhODdhZjM3MzllNmFhZDozYTc2OGJkZDE5NDMwYjY5ODkzZjMxYmNjNDE5M2E2Ng==");
@@ -35,7 +19,6 @@ export default function Sos ({navigation}) {
         'To': '+917021746420',
         'From': '+15855952432'
       }
->>>>>>> e6636a223b6a1195bc8617aaebdc8d1b9e98a7c7
 
       var formBody = [];
       for (var property in details) {
@@ -51,13 +34,18 @@ export default function Sos ({navigation}) {
           body: formBody
       };
 
+      const {manifest} = Constants
+      const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
+
+
+      await axios.get(uri+'/sendMessage').then(data => console.log(data.data)).catch(err => console.error(err))
       
 
-       fetch("https://api.twilio.com/2010-04-01/Accounts/AC85cc74a4a440bfcd82a87af3739e6aad/Messages.json", requestOptions)
-         .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
-      console.log('sos snet');
+      //  await fetch("https://api.twilio.com/2010-04-01/Accounts/AC85cc74a4a440bfcd82a87af3739e6aad/Messages.json", requestOptions)
+      //    .then(response => response.text())
+      //   .then(result => console.log(result))
+      //   .catch(error => console.log('error', error));
+      console.log('sos sent');
       ToastAndroid.show('SOS Sent Successfully',ToastAndroid.SHORT)
       
 

@@ -51,26 +51,6 @@ export default function NearestSafeSpot({navigation}) {
   
 
 
-<<<<<<< HEAD
-  return(
-    <>
-    <View>
-    <Text style={styles.title}>Hey User</Text>
-    <Text style={styles.title2}>Nearby Safespots available are: </Text>
-    <ScrollView>
-    {
-      hospitals.map(hospital=>{
-        return(
-          <View style={styles.card}>
-    <TouchableOpacity onPress={() => navigation.navigate('DirectSpot',{hosp: hospital})}>
-      <Text style={styles.name}>{hospital.name}</Text>
-      <Text style={styles.address}>{hospital.address}</Text>
-      
-    </TouchableOpacity>
-  </View>
-        )
-      })
-=======
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Find Nearby Hospitals</Text>
@@ -89,14 +69,7 @@ export default function NearestSafeSpot({navigation}) {
       />
     </View>
   );
->>>>>>> e6636a223b6a1195bc8617aaebdc8d1b9e98a7c7
 }
-</ScrollView>
-</View>
-  </>
-  )
-};
-
 
 
 const styles = StyleSheet.create({
