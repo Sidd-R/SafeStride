@@ -2,6 +2,8 @@ const express=require('express');
 const app=express();
 const bodyParser=require('body-parser');
 const cors = require('cors');
+const spawner = require('child_process').spawn
+
 app.use(express.json());
 app.use(cors());
 
@@ -36,6 +38,43 @@ app.post('/sendMessage',(req,res)=>{
 
 
 app.get('/sendMessage',(req,res)=>{
+  client.calls
+      .create({
+        twiml: '<Response><Say>EMERGENCY! THE USER XYZ IS IN DANGER! THE USER XYZ IS IN DANGER! FROM SAFESTRIDE</Say></Response>',
+         to: '+919326227834',
+         from: '+15855952432'
+       })
+      .then(call => console.log(call.sid));
     res.send("Trying to get numbers");
 })
 
+app.get('/mltrial', (req,res)=>{
+  let feedback = runModel()
+  res.json({data:feedback})
+})
+
+app.get('/feedback', (req, res) => {
+  const result = feedback()
+  console.log(result,'r');
+  result.then(data => res.json({data:data}))
+  // res.send('Hello World!')
+})
+
+async function feedback (review)  {
+  try {
+      const result = await new Promise((res,rej) => {
+          const process = spawner('python',['./nlp2f.py',"input","kk",["jj",88]])
+          let temp = null
+
+          process.stdout.on('data',(data) => {
+              temp = data.toString()
+              console.log(temp);
+              res(temp)
+              
+          })  
+      })
+      return result        
+  } catch (err) {
+      console.log(new Error(err).message)
+  }    
+}
