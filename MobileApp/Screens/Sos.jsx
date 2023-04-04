@@ -1,15 +1,18 @@
-import { StyleSheet, Text, View, Button, TextInput, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, ToastAndroid } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import {useState,useEffect} from 'react';
+<<<<<<< HEAD
 import * as Location from 'expo-location';
 import NearestSafeSpot from './NearestSafeSpot';
 import axios from 'axios'
+=======
+>>>>>>> e6636a223b6a1195bc8617aaebdc8d1b9e98a7c7
 
- export default function Sos ({navigation}) {
-  const [phone1,setPhone1]=useState("");
-  const [phone2,setPhone2]=useState("");
+export default function Sos ({navigation}) {
+
   const sendSOS = async () => {
     try {
+<<<<<<< HEAD
       
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
@@ -22,14 +25,25 @@ import axios from 'axios'
           'To': '+917021746420',
           'From': '+15855952432'
         }
+=======
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+      myHeaders.append("Authorization", "Basic QUM4NWNjNzRhNGE0NDBiZmNkODJhODdhZjM3MzllNmFhZDozYTc2OGJkZDE5NDMwYjY5ODkzZjMxYmNjNDE5M2E2Ng==");
 
-        var formBody = [];
-        for (var property in details) {
-          var encodedKey = encodeURIComponent(property);
-          var encodedValue = encodeURIComponent(details[property]);
-          formBody.push(encodedKey + "=" + encodedValue);
-        }
-        formBody = formBody.join("&");
+      var details = {
+        'Body': 'msg from frntd',
+        'To': '+917021746420',
+        'From': '+15855952432'
+      }
+>>>>>>> e6636a223b6a1195bc8617aaebdc8d1b9e98a7c7
+
+      var formBody = [];
+      for (var property in details) {
+        var encodedKey = encodeURIComponent(property);
+        var encodedValue = encodeURIComponent(details[property]);
+        formBody.push(encodedKey + "=" + encodedValue);
+      }
+      formBody = formBody.join("&");
 
         var requestOptions = {
           method: 'POST',
@@ -44,6 +58,7 @@ import axios from 'axios'
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
       console.log('sos snet');
+      ToastAndroid.show('SOS Sent Successfully',ToastAndroid.SHORT)
       
 
     }

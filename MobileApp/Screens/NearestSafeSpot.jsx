@@ -26,7 +26,7 @@ export default function NearestSafeSpot({navigation}) {
       setlong(longitude)
 
       console.log(latitude, longitude);
-
+                                                                   // location=19.4065, 72.8338
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${NEARBY_SEARCH_RADIUS}&type=hospital&key=${GOOGLE_MAPS_API_KEY}`
       );
@@ -51,6 +51,7 @@ export default function NearestSafeSpot({navigation}) {
   
 
 
+<<<<<<< HEAD
   return(
     <>
     <View>
@@ -69,6 +70,26 @@ export default function NearestSafeSpot({navigation}) {
   </View>
         )
       })
+=======
+  return (
+    <View style={styles.container}>
+      <Text style={styles.heading}>Find Nearby Hospitals</Text>
+      <Text style={styles.heading}>Latitude: {lat} </Text>
+      <Text style={styles.heading}>Longitude: {long} </Text>
+      
+      <FlatList
+        data={hospitals}
+        keyExtractor={(item) => item.address}
+        renderItem={({ item }) => (
+          <View style={styles.placeContainer}>
+            <Text style={styles.placeName}>{item.name}</Text>
+            <Text style={styles.placeAddress}>{item.address}</Text>
+          </View>
+        )}
+      />
+    </View>
+  );
+>>>>>>> e6636a223b6a1195bc8617aaebdc8d1b9e98a7c7
 }
 </ScrollView>
 </View>
