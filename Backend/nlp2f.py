@@ -7,64 +7,65 @@ Original file is located at
     https://colab.research.google.com/drive/1zr5mUqb3Nc6idniKlUDZO2vsDVk7l8r6
 """
 import sys
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
+# import numpy as np
+# import matplotlib.pyplot as plt
+# import pandas as pd
 
-df = pd.read_csv('sentiment.csv')
-
-
-import re
-import nltk
-nltk.download('stopwords')
-from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
-
-corpus = []
-for i in range(0, 54):
-  review = re.sub('[^a-zA-Z]', ' ', df['Review'][i])
-  review = review.lower()
-  review = review.split()
-  ps = PorterStemmer()
-
-  all_stopwords = stopwords.words('english')
-  all_stopwords.remove('not')
-  review = [ps.stem(word) for word in review if not word in set(all_stopwords)]
-  review = ' '.join(review)
-  corpus.append(review)
+# df = pd.read_csv('sentiment.csv')
 
 
-# print(corpus)
+# import re
+# import nltk
+# nltk.download('stopwords')
+# from nltk.corpus import stopwords
+# from nltk.stem.porter import PorterStemmer
 
-from sklearn.feature_extraction.text import CountVectorizer
-cv = CountVectorizer(max_features = 500)
-X = cv.fit_transform(corpus).toarray()
-y = df.iloc[:, -1].values
+# corpus = []
+# for i in range(0, 54):
+#   review = re.sub('[^a-zA-Z]', ' ', df['Review'][i])
+#   review = review.lower()
+#   review = review.split()
+#   ps = PorterStemmer()
 
-from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.01, random_state = 0)
+  # all_stopwords = stopwords.words('english')
+  # all_stopwords.remove('not')
+  # review = [ps.stem(word) for word in review if not word in set(all_stopwords)]
+  # review = ' '.join(review)
+  # corpus.append(review)
 
-from sklearn.naive_bayes import GaussianNB
-classifier = GaussianNB()
-classifier.fit(X_train, y_train)
+
+# # print(corpus)
+
+# from sklearn.feature_extraction.text import CountVectorizer
+# cv = CountVectorizer(max_features = 500)
+# X = cv.fit_transform(corpus).toarray()
+# y = df.iloc[:, -1].values
+
+# from sklearn.model_selection import train_test_split
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.01, random_state = 0)
+
+# from sklearn.naive_bayes import GaussianNB
+# classifier = GaussianNB()
+# classifier.fit(X_train, y_train)
 
 # X_input=sys.argv[1]
-X_input="rash driving"
-a = sys.argv
+# X_input="rash driving"
+# a = 99
+a = sys.argv[1:]
 print(a,end="")
 # X_input = "nice service"
-cor=[]
-rev = re.sub('[^a-zA-Z]', ' ', X_input)
-rev = rev.lower()
-rev = rev.split()
-ps = PorterStemmer()
-all_stopwords = stopwords.words('english')
-all_stopwords.remove('not')
-rev = [ps.stem(word) for word in rev if not word in set(all_stopwords)]
-rev = ' '.join(rev)
-cor.append(rev)
-XX = cv.transform(cor).toarray()
-final=classifier.predict(XX)
+# cor=[]
+# rev = re.sub('[^a-zA-Z]', ' ', X_input)
+# rev = rev.lower()
+# rev = rev.split()
+# ps = PorterStemmer()
+# all_stopwords = stopwords.words('english')
+# all_stopwords.remove('not')
+# rev = [ps.stem(word) for word in rev if not word in set(all_stopwords)]
+# rev = ' '.join(rev)
+# cor.append(rev)
+# XX = cv.transform(cor).toarray()
+# final=classifier.predict(XX)
 # print(final[0], end='')
 # if (final==0):
 #   print('Negative feedback',end='')

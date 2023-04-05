@@ -8,6 +8,7 @@ app.use(express.json());
 app.use(cors());
 
 const twilio = require('twilio');
+const { log } = require('console');
 const accountSid = 'AC85cc74a4a440bfcd82a87af3739e6aad'; // Your Account SID from www.twilio.com/console
 const authToken = '3a768bdd19430b69893f31bcc4193a66'; // Your Auth Token from www.twilio.com/console
 const client = twilio(accountSid, authToken);
@@ -60,7 +61,7 @@ app.get('/feedback', (req, res) => {
   // res.send('Hello World!')
 })
 
-async function feedback (review)  {
+async function feedback ()  {
   try {
       const result = await new Promise((res,rej) => {
           const process = spawner('python',['./nlp2f.py',"input","kk",["jj",88]])
@@ -68,7 +69,42 @@ async function feedback (review)  {
 
           process.stdout.on('data',(data) => {
               temp = data.toString()
-              console.log(temp);
+              console.log(temp,'2');
+              res(temp)
+              
+          })  
+      })
+      return result        
+  } catch (err) {
+      console.log(new Error(err).message)
+  }    
+}
+
+
+
+app.post('/safestroute',async (req, res) => {
+  let {path} =  req.body
+  let riskscore = 0
+  for (let index = 0; index < path.length; index++) {
+    //  = path[index];
+    let temp = await calculateSaftey(path[index])
+    temp.then((data) => {console.log();})
+  }
+  // const result = await calculateSaftey(p)
+  // console.log(result,'r');
+  // result.then(data => res.json({data:data}))
+  res.send("hello")
+})
+
+async function calculateSaftey ()  {
+  try {
+      const result = await new Promise((res,rej) => {
+          const process = spawner('python',['./mlmodel.py',input])
+          let temp = null
+
+          process.stdout.on('data',(data) => {
+              temp = data.toString()
+              console.log(temp,'2');
               res(temp)
               
           })  
