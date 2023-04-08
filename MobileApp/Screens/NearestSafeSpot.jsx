@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList ,TouchableOpacity,ScrollView} from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import DirectSpot from './DirectSpot'
-const GOOGLE_MAPS_API_KEY ='AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY'
+const GOOGLE_MAPS_API_KEY = 'AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY'
 
 const NEARBY_SEARCH_RADIUS = 500; // Search radius in meters
 
-export default function NearestSafeSpot({navigation}) {
+export default function NearestSafeSpot({ navigation }) {
   const [hospitals, setHospitals] = useState([]);
   const [lat, setLat] = useState(0)
   const [long, setlong] = useState(0)
@@ -26,7 +26,7 @@ export default function NearestSafeSpot({navigation}) {
       setlong(longitude)
 
       console.log(latitude, longitude);
-                                                                   // location=19.4065, 72.8338
+      // location=19.4065, 72.8338
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${NEARBY_SEARCH_RADIUS}&type=hospital&key=${GOOGLE_MAPS_API_KEY}`
       );
@@ -46,27 +46,28 @@ export default function NearestSafeSpot({navigation}) {
       setHospitals(results);
     })();
 
-    
+
   }, []);
-  
+
 
 
   return (
+
     <View style={styles.container}>
-      <Text style={styles.heading}>Find Nearby Hospitals</Text>
-      <Text style={styles.heading}>Latitude: {lat} </Text>
-      <Text style={styles.heading}>Longitude: {long} </Text>
-      
-      <FlatList
-        data={hospitals}
-        keyExtractor={(item) => item.address}
-        renderItem={({ item }) => (
-          <View style={styles.placeContainer}>
-            <Text style={styles.placeName}>{item.name}</Text>
-            <Text style={styles.placeAddress}>{item.address}</Text>
-          </View>
-        )}
-      />
+      <Text style={styles.heading}>Find Nearby SafeSpots</Text>
+      <ScrollView>
+      {
+        hospitals.map((result) => {
+          return (
+            <TouchableOpacity  style={styles.card} onPress={() => navigation.navigate('DirectSpot', { 'hosp': result  })}>
+            <Text style={styles.name}>{result.name}</Text>
+            <Text style={styles.address}>{result.address}</Text>
+            </TouchableOpacity>
+            )
+          }
+        )
+      }
+      </ScrollView>
     </View>
   );
 }
@@ -84,6 +85,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: 'cadetblue'
   },
   placeContainer: {
     padding: 10,
@@ -98,34 +100,34 @@ const styles = StyleSheet.create({
   placeAddress: {
     fontSize: 16,
   },
-  title:{
+  title: {
     fontSize: 20,
     fontWeight: 'bold',
     marginLeft: 30,
     marginTop: 30,
     color: 'cadetblue',
   },
-  title2:{
-    marginLeft:30,
+  title2: {
+    marginLeft: 30,
     marginTop: 10,
     marginBottom: 20,
     color: 'cadetblue',
   },
-  card: { width: '95%',
-  marginTop: 5,
-  marginLeft: 10,
-  marginRight: 10,
-  marginBottom: 10,
-  
-  borderColor: 'lightblue',
-  borderWidth:1,
-  borderRadius: 10,
-  justifyContent: 'flex-start',
-  alignItems: 'flex-start',
+  card: {
+    width: '95%',
+    marginTop: 5,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 10,
+    borderColor: 'lightblue',
+    borderWidth: 1,
+    borderRadius: 10,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
-  name:{
+  name: {
     marginTop: 8,
-    marginLeft:20,
+    marginLeft: 20,
     fontSize: 15,
   },
   address: {
@@ -135,3 +137,15 @@ const styles = StyleSheet.create({
     marginLeft: 20
   }
 });
+
+/* 
+      <FlatList
+        data={hospitals}
+        keyExtractor={(item) => item.address}
+        renderItem={({ item }) => (
+          <View style={styles.placeContainer}>
+            <Text style={styles.placeName}>{item.name}</Text>
+            <Text style={styles.placeAddress}>{item.address}</Text>
+          </View>
+        )}
+        */
