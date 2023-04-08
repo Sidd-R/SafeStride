@@ -80,6 +80,18 @@ async function feedback ()  {
   }    
 }
 
+//we get the path array where there are waypoints with their latitudes and longitudes
+//then we need to call api to calculate nearby police stations and nearby metro
+//then we need to send it to the clustering model and hence we get the risk score
+//then we add it to the total risk
+async function getNearby(area)
+{
+  const apikey="";
+  const nearbyPolice="";
+  const nearbyMetro="";
+  //after getting we need to pass it into cluster
+  
+}
 
 
 app.post('/safestroute',async (req, res) => {
