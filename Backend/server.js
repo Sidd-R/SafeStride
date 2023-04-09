@@ -1,17 +1,17 @@
 const express=require('express');
 const app=express();
-const bodyParser=require('body-parser');
 const cors = require('cors');
 const spawner = require('child_process').spawn
+const twilio = require('twilio');
+const { default: axios } = require('axios');
 
 app.use(express.json());
 app.use(cors());
 
-const twilio = require('twilio');
-const { log } = require('console');
 const accountSid = 'AC85cc74a4a440bfcd82a87af3739e6aad'; // Your Account SID from www.twilio.com/console
 const authToken = '3a768bdd19430b69893f31bcc4193a66'; // Your Auth Token from www.twilio.com/console
 const client = twilio(accountSid, authToken);
+
 app.listen('3010',(req,res)=>{
     console.log("Im running on port 3010");
 })
@@ -95,12 +95,22 @@ async function getNearby(area)
 
 
 app.post('/safestroute',async (req, res) => {
-  let {path} =  req.body
+  // let {path} =  req.body
   let riskscore = 0
-  for (let index = 0; index < path.length; index++) {
-    //  = path[index];
-    let temp = await calculateSaftey(path[index])
-    temp.then((data) => {console.log();})
+  for (let index = 0; index < 1; index++) {
+    //police: https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=19.4065,72.8338&radius=500&type=police&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY
+    //metroStation: https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=19.4065,72.8338&radius=500&type=subway_station&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY
+    let latitude = 28.53545305289798
+    let longitude = 77.2197712419418
+    let startTime = 19
+    let endTime = 22
+    let police = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=1000&type=police&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
+    let metro = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=1000&type=subway_station&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
+    console.log(metro,police,latitude,longitude,startTime,endTime);
+    let temp = await calculateSaftey(metro,police,latitude,longitude,startTime,endTime)
+    console.log(temp);
+    riskscore += Number(temp)
+    // temp.then((data) => {console.log(data);})
   }
   // const result = await calculateSaftey(p)
   // console.log(result,'r');
@@ -108,15 +118,15 @@ app.post('/safestroute',async (req, res) => {
   res.send("hello")
 })
 
-async function calculateSaftey ()  {
+async function calculateSaftey (metro,police,latitude,longitude,startTime,endTime) {
   try {
       const result = await new Promise((res,rej) => {
-          const process = spawner('python',['./mlmodel.py',input])
+          const process = spawner('python',['./mlmodel.py',latitude,longitude,police,metro,startTime,endTime])
           let temp = null
 
           process.stdout.on('data',(data) => {
               temp = data.toString()
-              console.log(temp,'2');
+              // console.log(temp,'2');
               res(temp)
               
           })  
