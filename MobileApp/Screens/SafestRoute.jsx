@@ -12,11 +12,33 @@ const Map=()=>{
   const [location,setLocation]=useState({latitude:0, longitude:0});
   const [source,setSource]=useState("");
   const [destination,setDestination]=useState("");
+  var sourcelat,sourcelong,destlat,destlong;
   //const [routes,setRoutes]=useState([]);
   async function handlePress() {
 
       const waypoints = [];
       let n=0;
+      try{
+        const response3=await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${source}&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`)
+        const data=await response3.json();
+        sourcelat=data.results[0].geometry.location.lat;
+        sourcelong=data.results[0].geometry.location.lng;
+        console.log("latitude: ",lat," longitude: ",long);
+      }catch(error)
+      {
+        console.log(error)
+      }
+      try{
+        const response3=await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${destination}&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`)
+        const data=await response3.json();
+        destlat=data.results[0].geometry.location.lat;
+        destlong=data.results[0].geometry.location.lng;
+        console.log("latitude: ",lat," longitude: ",long);
+      }catch(error)
+      {
+        console.log(error)
+      }
+
       try {
         console.log("the source and destination are: ",source," and ",destination)
         const response = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${source}&destination=${destination}&key=${GOOGLE_MAPS_API_KEY}&alternatives=true`);
@@ -60,6 +82,10 @@ const Map=()=>{
              const response2 = await axios.post('http://192.168.11.214:3010/safestroute', {
               waypoints: waypoints,
               numberOfRoutes: n+1,
+              destlatitude: destlat,
+              destlongitude: destlong,
+              sourcelatitude: sourcelat,
+              sourcelongitude: sourcelong,
             });
           } 
           catch (error) {
@@ -77,7 +103,10 @@ const Map=()=>{
         <Text style={styles.buttonText}>Go</Text>
       </TouchableOpacity>
       </View>
-    
+      <View style={styles.mapsec}>
+        
+       
+      </View>
     </View>
   )
 }

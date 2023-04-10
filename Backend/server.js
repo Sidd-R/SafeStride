@@ -92,8 +92,11 @@ app.get('/safestroute',async(req,res)=>{
 
 app.post('/safestroute',async (req, res) => {
 
-  console.log(req.body.waypoints); //array with latitude, longitude, route number and time
+  console.log("source: ",req.body.sourcelatitude, req.body.sourcelongitude);
+  console.log("latitude:",req.body.destlatitude,req.body.destlongitude);
+  //console.log(req.body.waypoints); //array with latitude, longitude, route number and time
   console.log(req.body.numberOfRoutes);
+  
   var time = 12;
   const waypoints=req.body.waypoints;
   const n=req.body.numberOfRoutes;
