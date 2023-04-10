@@ -82,7 +82,7 @@ app.get('/safestroute',async(req,res)=>{
 
 app.post('/safestroute',async (req, res) => {
 
-  console.log(req.body.waypoints);
+  console.log(req.body.waypoints); //array with latitude, longitude, route number and time
   console.log(req.body.numberOfRoutes);
   var time = 12;
   const waypoints=req.body.waypoints;
@@ -98,10 +98,10 @@ app.post('/safestroute',async (req, res) => {
     console.log("time spent in this area: ",waypoints[index].duration);
     let latitude=waypoints[index].latitude;
     let longitude=waypoints[index].longitude;
-    console.log(typeof(waypoints[index].duration));
+    console.log("start time: ",time);
     let duration=Number(waypoints[index].duration[0]+waypoints[index].duration[1]);
     time=time+duration*1.0/60;
-    console.log(time);
+    console.log("end time: ",time);
     let police = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=500&type=police&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
     let metro = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=500&type=subway_station&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
     console.log("metro in this area ",metro);
