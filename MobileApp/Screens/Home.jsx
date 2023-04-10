@@ -19,6 +19,7 @@ export default function Home({ navigation }) {
           <Text style={styles.cardTitle}>S O S</Text>
         </TouchableOpacity>
       </View>
+
     </View>
   );
 }

@@ -4,6 +4,7 @@ const cors = require('cors');
 const spawner = require('child_process').spawn
 const twilio = require('twilio');
 const { default: axios } = require('axios');
+const bodyParder=require("body-parser");
 
 app.use(express.json());
 app.use(cors());
@@ -36,7 +37,9 @@ app.post('/sendMessage',(req,res)=>{
   res.send("The numbers recieved are "+ph1);
 
 })
-
+app.post('/',(req,res)=>{
+  console.log("yayy, got the post request");
+})
 
 app.get('/sendMessage',(req,res)=>{
   client.calls
@@ -80,36 +83,41 @@ async function feedback ()  {
   }    
 }
 
-//we get the path array where there are waypoints with their latitudes and longitudes
-//then we need to call api to calculate nearby police stations and nearby metro
-//then we need to send it to the clustering model and hence we get the risk score
-//then we add it to the total risk
-async function getNearby(area)
-{
-  const apikey="";
-  const nearbyPolice="";
-  const nearbyMetro="";
-  //after getting we need to pass it into cluster
-  
-}
+app.get('/safestroute',async(req,res)=>{
+  console.log("safestroute requested");
+  res.send("request for safestroute");
+})
 
 
 app.post('/safestroute',async (req, res) => {
-  // let {path} =  req.body
+  console.log(req.body.waypoints);
+  console.log(req.body.numberOfRoutes);
+  const waypoints=req.body.waypoints;
+  const n=req.body.numberOfRoutes;
   let riskscore = 0
-  for (let index = 0; index < 1; index++) {
-    //police: https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=19.4065,72.8338&radius=500&type=police&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY
-    //metroStation: https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=19.4065,72.8338&radius=500&type=subway_station&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY
-    let latitude = 28.53545305289798
-    let longitude = 77.2197712419418
-    let startTime = 19
-    let endTime = 22
-    let police = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=1000&type=police&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
-    let metro = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=1000&type=subway_station&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
-    console.log(metro,police,latitude,longitude,startTime,endTime);
-    let temp = await calculateSaftey(metro,police,latitude,longitude,startTime,endTime)
-    console.log(temp);
-    riskscore += Number(temp)
+  let i=0;
+  for (let index = 0; index < waypoints.length; index++) {
+    console.log("route number :",i);
+    while(index<waypoints.length && waypoints[index].route==i )
+    {
+    
+    console.log("latitude: ",waypoints[index].latitude);
+    console.log("longitude: ",waypoints[index].longitude);
+    let latitude=waypoints[index].latitude;
+    let longitude=waypoints[index].longitude;
+    let police = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=500&type=police&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
+    let metro = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=500&type=subway_station&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
+    console.log("metro in this area ",metro);
+    console.log("Police in this area: ",police);
+    index++;
+    }
+    i++;
+   
+    //
+    //console.log(metro,police,latitude,longitude,startTime,endTime);
+    //let temp = await calculateSaftey(metro,police,latitude,longitude,startTime,endTime)
+    //console.log(temp);
+    //riskscore += Number(temp)
     // temp.then((data) => {console.log(data);})
   }
   // const result = await calculateSaftey(p)

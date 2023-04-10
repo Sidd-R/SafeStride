@@ -6,6 +6,7 @@ import NearestSafeSpot from './NearestSafeSpot';
 import axios from 'axios'
 import Constants from "expo-constants";
 
+
 export default function Sos ({navigation}) {
 
   const sendSOS = async () => {
