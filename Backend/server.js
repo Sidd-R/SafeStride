@@ -39,6 +39,7 @@ app.post('/sendMessage',(req,res)=>{
 })
 app.post('/',(req,res)=>{
   console.log("yayy, got the post request");
+  console.log("from frontend");
 })
 
 app.get('/sendMessage',(req,res)=>{
@@ -90,8 +91,10 @@ app.get('/safestroute',async(req,res)=>{
 
 
 app.post('/safestroute',async (req, res) => {
+
   console.log(req.body.waypoints);
   console.log(req.body.numberOfRoutes);
+  var time = 12;
   const waypoints=req.body.waypoints;
   const n=req.body.numberOfRoutes;
   let riskscore = 0
@@ -100,16 +103,21 @@ app.post('/safestroute',async (req, res) => {
     console.log("route number :",i);
     while(index<waypoints.length && waypoints[index].route==i )
     {
-    
     console.log("latitude: ",waypoints[index].latitude);
     console.log("longitude: ",waypoints[index].longitude);
+    console.log("time spent in this area: ",waypoints[index].duration);
     let latitude=waypoints[index].latitude;
     let longitude=waypoints[index].longitude;
+    console.log(typeof(waypoints[index].duration));
+    let duration=Number(waypoints[index].duration[0]+waypoints[index].duration[1]);
+    time=time+duration*1.0/60;
+    console.log(time);
     let police = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=500&type=police&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
     let metro = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=500&type=subway_station&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
     console.log("metro in this area ",metro);
     console.log("Police in this area: ",police);
-    index++;
+    index+=1;
+    
     }
     i++;
    

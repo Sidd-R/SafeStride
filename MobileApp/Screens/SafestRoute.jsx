@@ -36,7 +36,7 @@ const Map=()=>{
                         route: routeIndex,
                         latitude: subStep.end_location.lat,
                         longitude: subStep.end_location.lng,
-                       
+                        duration: subStep.duration.text,
                       });
                     });
                   } else {
@@ -44,8 +44,8 @@ const Map=()=>{
                     waypoints.push({
                       latitude: step.end_location.lat,
                       longitude: step.end_location.lng,
-                      route: routeIndex
-                     
+                      route: routeIndex,
+                      duration: step.duration.text,
                     });
                   }
                 });
@@ -57,11 +57,10 @@ const Map=()=>{
             console.error(error);
           }
           try{
-            const response2 = await axios.post('http://192.168.162.214:3010/safestroute', {
+             const response2 = await axios.post('http://192.168.11.214:3010/safestroute', {
               waypoints: waypoints,
               numberOfRoutes: n+1,
             });
-      
           } 
           catch (error) {
           console.error(error);
