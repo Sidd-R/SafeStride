@@ -4,7 +4,6 @@ const cors = require('cors');
 const spawner = require('child_process').spawn
 const twilio = require('twilio');
 const { default: axios } = require('axios');
-const bodyParder=require("body-parser");
 
 app.use(express.json());
 app.use(cors());
@@ -15,11 +14,6 @@ const client = twilio(accountSid, authToken);
 
 app.listen('3010',(req,res)=>{
     console.log("Im running on port 3010");
-})
-
-app.get("/",(req,res)=>{
-  console.log("got requesttt");
-    res.send("The first request from server")
 })
 
 app.post('/sendMessage',(req,res)=>{
@@ -36,10 +30,6 @@ app.post('/sendMessage',(req,res)=>{
   // res.send("okk");
   res.send("The numbers recieved are "+ph1);
 
-})
-app.post('/',(req,res)=>{
-  console.log("yayy, got the post request");
-  console.log("from frontend");
 })
 
 app.get('/sendMessage',(req,res)=>{
