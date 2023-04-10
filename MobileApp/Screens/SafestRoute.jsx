@@ -3,10 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Dimensions ,Text,TextInput,Button, TouchableOpacity} from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
+import Constants from "expo-constants";
+
 const GOOGLE_MAPS_API_KEY='AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
-
-
-
 
 const Map=()=>{
   const [location,setLocation]=useState({latitude:0, longitude:0});
@@ -57,10 +56,14 @@ const Map=()=>{
             console.error(error);
           }
           try{
-             const response2 = await axios.post('http://192.168.11.214:3010/safestroute', {
+            const {manifest} = Constants
+            const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
+
+            const response2 = await axios.post(uri+'/safestroute', {
               waypoints: waypoints,
               numberOfRoutes: n+1,
-            });
+            }).then(data => data.data);
+            console.log(response2,"___________________________________");
           } 
           catch (error) {
           console.error(error);
