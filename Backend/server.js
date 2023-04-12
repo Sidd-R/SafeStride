@@ -31,7 +31,9 @@ app.post('/sendMessage',(req,res)=>{
   res.send("The numbers recieved are "+ph1);
 
 })
-
+app.get('/',(req,res)=>{
+  console.log("im a women safety app");
+})
 app.get('/sendMessage',(req,res)=>{
   client.calls
       .create({
@@ -42,8 +44,10 @@ app.get('/sendMessage',(req,res)=>{
       .then(call => console.log(call.sid));
     res.send("Trying to get numbers");
 })
-
-app.post('/safestroute',async (req, res) => {
+app.post('/',(req,res)=>{
+  console.log("yayy request from frontend ");
+})
+app.post('/safestroute', async (req, res) => {
   let riskscoreArray = []
   // console.log('f');
   // let temp = await calculateSaftey(2,2,19.2054785,72.8500442,20,22)
@@ -83,7 +87,7 @@ app.post('/safestroute',async (req, res) => {
     riskscore += Number(temp)
     waypointcount += 1
     }
-    riskscoreArray.push(riskscore/waypointcount)
+    riskscoreArray.push(riskscore/waypointcount);
     i++;
    
     //
@@ -99,6 +103,21 @@ app.post('/safestroute',async (req, res) => {
   res.json({riskscores: riskscoreArray})
 })
 
+
+app.post('/safetyArea', async (req,res)=>{
+  console.log('req');
+  console.log(req.body,req.params);
+  const latitude=req.body.sourcelat;
+  const longitude=req.body.sourcelong;
+  const radius=500;
+  let police = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=police&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
+  let metro = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=subway_station&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
+  let startTime = Number(new Date().getHours())
+  let endTime = startTime + 1
+  console.log(metro,police,latitude,longitude,startTime,endTime);
+  let riskscore = await calculateSaftey(metro,police,latitude,longitude,startTime,endTime) 
+  res.json({riskscores: Number(riskscore)})
+})
 async function calculateSaftey (metro,police,latitude,longitude,startTime,endTime) {
   try {
       const result = await new Promise((res,rej) => {

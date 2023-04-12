@@ -7,7 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1UnAZB8Ld6BHWse-IQZjCUuxcEyut3bQM
 """
 import sys
-import numpy as np
+#import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 

@@ -1,144 +1,170 @@
-import axios from 'axios';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Dimensions ,Text,TextInput,Button, TouchableOpacity} from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
-import MapViewDirections from 'react-native-maps-directions';
-import Constants from "expo-constants";
-
-const GOOGLE_MAPS_API_KEY='AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
-
-const Map=()=>{
-  const [location,setLocation]=useState({latitude:0, longitude:0});
-  const [source,setSource]=useState("");
-  const [destination,setDestination]=useState("");
-  var sourcelat,sourcelong,destlat,destlong;
-  //const [routes,setRoutes]=useState([]);
-  async function handlePress() {
-
-      const waypoints = [];
-      let n=0;
-      try{
-        const response3=await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${source}&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`)
-        const data=await response3.json();
-        sourcelat=data.results[0].geometry.location.lat;
-        sourcelong=data.results[0].geometry.location.lng;
-        console.log("latitude: ",lat," longitude: ",long);
-      }catch(error)
-      {
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Dimensions, Text, TextInput, Button, TouchableOpacity, ToggleButton } from 'react-native';
+const GOOGLE_MAPS_API_KEY = 'AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
+import axios from 'axios';
+const MapScreen = () => {
+  // Source and Destination coordinates
+  const [source,setSource] = useState({ latitude:28.66969942317484,  longitude:77.09303425361844 });
+  const [destination,setDestination] = useState({ latitude: 28.632481280670913, longitude: 77.13896183099209 });
+  const [sourceAddress,setSourceAddress]=useState("");
+  const [destAddress,setDestAddress]=useState("");
+  const waypoints=[];
+  const [routeRank, setRouteRank] = useState("");
+  // Polyline coordinates
+  const polylineCoords = [
+    source,
+    destination
+  ];
+  
+  
+  async function changeMap()
+  {
+      console.log("sourceAddress ",sourceAddress);
+      console.log("destinationAddress",destAddress);
+    try {
+        const response3 = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${sourceAddress}&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`)
+        const data = await response3.json();
+        setSource({latitude: data.results[0].geometry.location.lat, longitude: data.results[0].geometry.location.lng});
+        console.log("latitude: ", data.results[0].geometry.location.lat, " longitude: ", source.longitude);
+      } catch (error) {
         console.log(error)
       }
-      try{
-        const response3=await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${destination}&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`)
-        const data=await response3.json();
-        destlat=data.results[0].geometry.location.lat;
-        destlong=data.results[0].geometry.location.lng;
-        console.log("latitude: ",lat," longitude: ",long);
-      }catch(error)
-      {
-        console.log(error)
-      }
-
       try {
-        console.log("the source and destination are: ",source," and ",destination)
-        const response = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${source}&destination=${destination}&key=${GOOGLE_MAPS_API_KEY}&alternatives=true`);
+        const response3 = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${destAddress}&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`)
+        const data = await response3.json();
+        setDestination({latitude: data.results[0].geometry.location.lat, longitude: data.results[0].geometry.location.lng});
+        console.log("latitude: ", destination.latitude, " longitude: ", destination.longitude);
+      } catch (error) {
+        console.log(error)
+      }
+      try {
+        console.log("the source and destination are: ", sourceAddress, " and ", destAddress)
+        const response = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${sourceAddress}&destination=${destAddress}&key=${GOOGLE_MAPS_API_KEY}&alternatives=true`);
         const data = await response.json();
         const routes = data.routes;
-        
-            routes.forEach((route, routeIndex) => {
-              n=routeIndex;
-              route.legs.forEach((leg) => {
-                leg.steps.forEach((step) => {
-                  
-                  if (step.steps) {
-                    
-                    step.steps.forEach((subStep) => {
-                   
-                      waypoints.push({
-                        route: routeIndex,
-                        latitude: subStep.end_location.lat,
-                        longitude: subStep.end_location.lng,
-                        duration: subStep.duration.text,
-                      });
-                    });
-                  } else {
-                  
-                    waypoints.push({
-                      latitude: step.end_location.lat,
-                      longitude: step.end_location.lng,
-                      route: routeIndex,
-                      duration: step.duration.text,
-                    });
-                  }
+  
+        routes.forEach((route, routeIndex) => {
+          n = routeIndex;
+          route.legs.forEach((leg) => {
+            leg.steps.forEach((step) => {
+  
+              if (step.steps) {
+  
+                step.steps.forEach((subStep) => {
+  
+                  waypoints.push({
+                    route: routeIndex,
+                    latitude: subStep.end_location.lat,
+                    longitude: subStep.end_location.lng,
+                    duration: subStep.duration.text,
+                  });
                 });
-              });
+              } else {
+  
+                waypoints.push({
+                  latitude: step.end_location.lat,
+                  longitude: step.end_location.lng,
+                  route: routeIndex,
+                  duration: step.duration.text,
+                });
+              }
             });
-          console.log(waypoints);
-          console.log(n+1);
-          } catch (error) {
-            console.error(error);
+          });
+        });
+        console.log(waypoints);
+        console.log(n + 1);
+      } catch (error) {
+        console.error(error);
+      }
+      if (n != 0) {
+        try {
+          const response2 = await axios.post('http://192.168.74.214:3010/', {
+            waypoints: waypoints,
+            numberOfRoutes: n + 1,
+            destlatitude: destination.latitude,
+            destlongitude: destination.longitude,
+            sourcelatitude: source.latitude,
+            sourcelongitude: source.longitude,
+          }).then(data => data.data);
+          console.log(response2.riskscores);
+          const riskScores = response2.riskscores;
+          /*for (let i = 0; i < n; i++) {
+            routeRank[i] = i + 1;
           }
-          try{
-            const {manifest} = Constants
-            const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
-
-            const response2 = await axios.post(uri+'/safestroute', {
-              waypoints: waypoints,
-              numberOfRoutes: n+1,
-          
-              destlatitude: destlat,
-              destlongitude: destlong,
-              sourcelatitude: sourcelat,
-              sourcelongitude: sourcelong,
-            }).then(data => data.data);
-            console.log(response2,"___________________________________");
-          } 
-          catch (error) {
+          for (let i = 0; i < riskScores.length; i++) {
+            for (let j = i + 1; j < riskScores.length - 1 - i; j++) {
+              if (riskScores[j + 1] < riskScores[j]) {
+                let temp = riskScores[j];
+                riskScores[j] = riskScores[j + 1];
+                riskScores[j + 1] = temp;
+                temp = routeRank[j];
+                routeRank[j] = routeRank[j + 1];
+                routeRank[j + 1] = temp;
+              }
+            }
+          }
+          console.log("Ranking of Routes: ", routeRank);
+            */
+        }
+        catch (error) {
           console.error(error);
         }
+      }
+     
   }
-    
-  
-  return(
+  return (
     <View style={styles.container}>
-      <View style={styles.inputsec}>
-        <TextInput style={styles.input} placeholder='Source' onChangeText={setSource}/>
-        <TextInput style={styles.input} placeholder='destination' onChangeText={setDestination} />
-        <TouchableOpacity style={styles.button} onPress={handlePress}>
-        <Text style={styles.buttonText}>Go</Text>
-      </TouchableOpacity>
+       <View style={styles.inputsec}>
+        <TextInput style={styles.input} placeholder='Source' onChangeText={setSourceAddress}  />
+        <TextInput style={styles.input} placeholder='destination' onChangeText={setDestAddress} />
+        <TouchableOpacity style={styles.button} onPress={changeMap}>
+          <Text style={styles.buttonText} >Go</Text>
+        </TouchableOpacity>
       </View>
-      <View style={styles.mapsec}>
         
+      <MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: source.latitude,
+          longitude: source.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      >
        
-      </View>
+
+        {/* Polyline to draw route */}
+       
+      </MapView>
     </View>
-  )
-}
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'flex-end',
-    
+    flex: 1,
   },
-  mapsec: {
-    
+  map: {
+     
+      flex: 1,
   },
-    button: {
-      color: 'cadetblue',
-      height: 20,
-      backgroundColor: 'lightblue',
-      borderRadius: 5,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop:10,
-      marginLeft: 40,
-      marginRight: 30,
-      marginBottom: 10,
-    },
-  
   inputsec: {
     backgroundColor: 'cadetblue',
   },
-  input:{
+  button: {
+    color: 'cadetblue',
+    height: 20,
+    backgroundColor: 'lightblue',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    marginLeft: 40,
+    marginRight: 30,
+    marginBottom: 10,
+  },
+  input: {
     backgroundColor: 'white',
     marginLeft: 40,
     marginRight: 50,
@@ -148,38 +174,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     paddingLeft: 10,
   },
-  route: {
-
-  },
-  map: {
-    flex: 1,
-    marginTop: 50,
-    width: '100%',
-    height: '100%'
-  }
 });
 
-export default Map
-
-
-/*<Polyline
-          coordinates={[
-            {latitude: 28.6692, longitude: 77.107},
-            {latitude: 28.5355, longitude: 77.2649},
-          ]}
-          strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
-          strokeWidth={6}
-        /> */
-
-
-        
-    
-  
-  
-  
-  
-  
-  
-
-
-      
+export default MapScreen;
