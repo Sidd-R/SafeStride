@@ -5,6 +5,7 @@ const spawner = require('child_process').spawn
 const twilio = require('twilio');
 const { default: axios } = require('axios');
 
+
 app.use(express.json());
 app.use(cors());
 
@@ -17,18 +18,21 @@ app.listen('3010',(req,res)=>{
 })
 
 app.post('/sendMessage',(req,res)=>{
+    lat=req.body.lat;
+    long=req.body.long;
+  
     const ph1='+91'+req.body.ph1;
     console.log("Entered the messaging sectiom ");
     console.log(req.body);
     client.messages
   .create({
-    body: 'Hello Im in danger, please help, my current location is xxxx,yyyy',
-    to: ph1, // Text this number
+    body: `Hello Im in danger, please help, my current location is xxxx,yyy`,
+    to: '+917021746420', // Text this number
     from: '+15855952432', // From a valid Twilio number
   })
   .then((message) => console.log(message.sid));
   // res.send("okk");
-  res.send("The numbers recieved are "+ph1);
+  res.send("The numbers recieved are +917021746420");
 
 })
 app.get('/',(req,res)=>{
@@ -81,7 +85,7 @@ app.post('/safestroute', async (req, res) => {
     let metro = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=500&type=subway_station&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
     console.log("metro in this area ",metro);
     console.log("Police in this area: ",police);
-    index+=1;
+    index+=8;
     let temp = await calculateSaftey(metro,police,latitude,longitude,startTime,endTime)
     console.log('----------------------------------------------');
     riskscore += Number(temp)
@@ -89,7 +93,7 @@ app.post('/safestroute', async (req, res) => {
     }
     riskscoreArray.push(riskscore/waypointcount);
     i++;
-   
+    
     //
     //console.log(metro,police,latitude,longitude,startTime,endTime);
     // let temp = await calculateSaftey(metro,police,latitude,longitude,startTime,endTime)
