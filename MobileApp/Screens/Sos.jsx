@@ -1,3 +1,4 @@
+
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions, ToastAndroid } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import {useState,useEffect} from 'react';
@@ -8,17 +9,29 @@ import Constants from "expo-constants";
 
 
 export default function Sos ({navigation}) {
-
+  
   const sendSOS = async () => {
     try {
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
       myHeaders.append("Authorization", "Basic QUM4NWNjNzRhNGE0NDBiZmNkODJhODdhZjM3MzllNmFhZDozYTc2OGJkZDE5NDMwYjY5ODkzZjMxYmNjNDE5M2E2Ng==");
 
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      let { latitude, longitude } = location.coords;
+      setLat(latitude)
+      setlong(longitude)
+
       var details = {
         'Body': 'msg from frntd',
         'To': '+917021746420',
-        'From': '+15855952432'
+        'From': '+15855952432',
+
       }
 
       var formBody = [];
@@ -36,10 +49,10 @@ export default function Sos ({navigation}) {
       };
 
       const {manifest} = Constants
-      const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
+      const uri = `http://192.168.74.214:3010`;
 
 
-      // await axios.get(uri+'/sendMssage').then(data => console.log(data.data)).catch(err => console.error(err))
+      await axios.post(uri+'/sendMessage').then(data => console.log(data.data)).catch(err => console.error(err))
       
 
       //  await fetch("https://api.twilio.com/2010-04-01/Accounts/AC85cc74a4a440bfcd82a87af3739e6aad/Messages.json", requestOptions)
