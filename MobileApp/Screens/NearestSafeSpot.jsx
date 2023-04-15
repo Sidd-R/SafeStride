@@ -3,50 +3,52 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity, ScrollView } from '
 import * as Location from 'expo-location';
 import axios from 'axios';
 import DirectSpot from './DirectSpot'
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
+
 const GOOGLE_MAPS_API_KEY = 'AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY'
 
-const NEARBY_SEARCH_RADIUS = 500; // Search radius in meters
+const NEARBY_SEARCH_RADIUS = 200; // Search radius in meters
 
 export default function NearestSafeSpot({ navigation }) {
   const [hospitals, setHospitals] = useState([]);
-  const [lat, setLat] = useState(0)
-  const [long, setlong] = useState(0)
+
+  const getSafeSpots = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+
+    if (status !== 'granted') {
+      console.log('Permission to access location was denied');
+      return
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    let { latitude, longitude } = location.coords;
+
+    console.log(latitude, longitude);
+
+    // location=19.4065, 72.8338
+    const response = await axios.get(
+      `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${NEARBY_SEARCH_RADIUS}&type=hospital&key=${GOOGLE_MAPS_API_KEY}`
+    );
+
+    const results =  []
+    response.data.results.forEach((result) => {
+      results.push({
+        name: result.name,
+        address: result.vicinity,
+        latitude: result.geometry.location.lat,
+        longitude: result.geometry.location.lng,
+      })
+    });
+
+    setHospitals(results);
+  }
 
   useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('Permission to access location was denied');
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      let { latitude, longitude } = location.coords;
-      setLat(latitude)
-      setlong(longitude)
-
-      console.log(latitude, longitude);
-      // location=19.4065, 72.8338
-      const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${NEARBY_SEARCH_RADIUS}&type=hospital&key=${GOOGLE_MAPS_API_KEY}`
-      );
-
-      // console.log(response);
-
-      const results = response.data.results.map((result) => {
-        // console.log(result,2);
-        return {
-          name: result.name,
-          address: result.vicinity,
-          latitude: result.geometry.location.lat,
-          longitude: result.geometry.location.lng,
-        };
-      });
-      // console.log(results,3);
-      setHospitals(results);
-    })();
-
-
+    getSafeSpots()
   }, []);
 
 
@@ -55,13 +57,13 @@ export default function NearestSafeSpot({ navigation }) {
 
     <View style={styles.container}>
       <Text style={styles.heading}>Find Nearby SafeSpots</Text>
-      <ScrollView>
+      <ScrollView className="w-10/12  ">
       {
-        hospitals.map((result) => {
+        hospitals.map((result,i) => {
           return (
-            <TouchableOpacity  style={styles.card} onPress={() => navigation.navigate('DirectSpot', { 'hosp': result  })}>
-            <Text style={styles.name}>{result.name}</Text>
-            <Text style={styles.address}>{result.address}</Text>
+            <TouchableOpacity  style={styles.card} onPress={() => navigation.navigate('DirectSpot', { hosp: result})} key={i}>
+              <Text style={styles.name}>{result.name}</Text>
+              <Text style={styles.address}>{result.address}</Text>
             </TouchableOpacity>
             )
           }
@@ -79,26 +81,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    paddingTop: 10,
   },
   heading: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
     color: 'cadetblue'
-  },
-  placeContainer: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  placeName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  placeAddress: {
-    fontSize: 16,
   },
   title: {
     fontSize: 20,
@@ -107,21 +96,15 @@ const styles = StyleSheet.create({
     marginTop: 30,
     color: 'cadetblue',
   },
-  title2: {
-    marginLeft: 30,
-    marginTop: 10,
-    marginBottom: 20,
-    color: 'cadetblue',
-  },
   card: {
-    width: '95%',
+    // width: '100%',
     marginTop: 5,
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 5,
+    marginRight: 5,
     marginBottom: 10,
     borderColor: 'lightblue',
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 7,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
   },
@@ -133,7 +116,7 @@ const styles = StyleSheet.create({
   address: {
     marginBottom: 5,
     marginTop: 5,
-    fontSize: 8,
+    fontSize: 11,
     marginLeft: 20
   }
 });

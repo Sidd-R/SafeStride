@@ -1,33 +1,108 @@
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Dimensions, Text, TextInput, Button, TouchableOpacity, ToggleButton } from 'react-native';
-import Constants from "expo-constants";
-import axios from 'axios';
-
+import { StyleSheet, View, Dimensions, Text, TextInput, Button, TouchableOpacity, ToggleSButton } from 'react-native';
 const GOOGLE_MAPS_API_KEY = 'AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
+import axios from 'axios';
+import Constants from "expo-constants";
+import getDirections from 'react-native-google-maps-directions';
 
-const MapScreen = () => {
-  // Source and Destination coordinates
-  const [source,setSource] = useState({ latitude:28.66969942317484,  longitude:77.09303425361844 });
-  const [destination,setDestination] = useState({ latitude: 28.632481280670913, longitude: 77.13896183099209 });
+const SafestRoute = () => {
+  const [source,setSource] = useState({ latitude:19.113645,  longitude:72.8695881 });
+  const [destination,setDestination] = useState({ latitude: 19.2009332, longitude: 77.13896183099209 });
   const [sourceAddress,setSourceAddress]=useState("");
   const [destAddress,setDestAddress]=useState("");
   const waypoints=[];
-  const [routeRank, setRouteRank] = useState("");
   const [answer,setAnswer]=useState([]);
   const [dispMap, setDispMap] = useState(false)
-  // Polyline coordinates
-  const polylineCoords = [
-    source,
-    destination
-  ];
+  const [routeCoordinates, setRouteCoordinates] = useState([]);
+  const [routePoints, setRoutePoints] = useState(null)
+  const [routeOverViews, setRouteOverViews] = useState([])
+  let n=0
+
+  const decodePolyline = (encoded) => {
+    const poly = [];
+    let index = 0;
+    const len = encoded.length;
+    let lat = 0;
+    let lng = 0;
+  
+    while (index < len) {
+      let b;
+      let shift = 0;
+      let result = 0;
+  
+      do {
+        b = encoded.charAt(index++).charCodeAt(0) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+  
+      const dLat = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
+      lat += dLat;
+  
+      shift = 0;
+      result = 0;
+  
+      do {
+        b = encoded.charAt(index++).charCodeAt(0) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+  
+      const dLng = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
+      lng += dLng;
+  
+      poly.push({
+        latitude: lat / 1e5,
+        longitude: lng / 1e5,
+      });
+    }
+  
+    return poly;
+  };  
+
+  const handleGetDirections = async () => {
+    const resp = await axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=Andheri&destination=Malad&key=${GOOGLE_MAPS_API_KEY}&alternatives=true`)
+    console.log(resp.data);
+    const points = resp.data.routes[0].overview_polyline.points;
+    const routePoints = decodePolyline(points);
+    setRoutePoints(routePoints);
+  };
+
+  useEffect(() => {
+    // handleGetDirections()
+    // const directions = new Directions({
+    //   origin: {
+    //     latitude: 37.78825,
+    //     longitude: -122.4324,
+    //   },
+    //   destination: {
+    //     latitude: 37.7749,
+    //     longitude: -122.4194,
+    //   },
+    //   params: {
+    //     key: 'AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY',
+    //   },
+    // });
+
+    
+
+    // directions.getDirections()
+    //   .then((result) => {
+    //     const { coordinates } = result.routes[0].overview_polyline;
+    //     setRouteCoordinates(coordinates);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+  }, [])
   
   
-  async function changeMap()
-  {
+  async function changeMap() {
       console.log("sourceAddress ",sourceAddress);
       console.log("destinationAddress",destAddress);
     try {
+      console.log(`https://maps.googleapis.com/maps/api/geocode/json?address=${sourceAddress}&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`);
         const response3 = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${sourceAddress}&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`)
         const data = await response3.json();
         setSource({latitude: data.results[0].geometry.location.lat, longitude: data.results[0].geometry.location.lng});
@@ -46,11 +121,14 @@ const MapScreen = () => {
       try {
         console.log("the source and destination are: ", sourceAddress, " and ", destAddress)
         const response = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${sourceAddress}&destination=${destAddress}&key=${GOOGLE_MAPS_API_KEY}&alternatives=true`);
+        console.log(`https://maps.googleapis.com/maps/api/directions/json?origin=${sourceAddress}&destination=${destAddress}&key=${GOOGLE_MAPS_API_KEY}&alternatives=true`);
         const data = await response.json();
         const routes = data.routes;
   
         routes.forEach((route, routeIndex) => {
-          n = routeIndex;
+           n= routeIndex;
+          console.log('kk',decodePolyline(route.overview_polyline.points));
+          routeOverViews.push(decodePolyline(route.overview_polyline.points))
           route.legs.forEach((leg) => {
             leg.steps.forEach((step) => {
   
@@ -77,16 +155,18 @@ const MapScreen = () => {
             });
           });
         });
-        console.log(waypoints);
+        // console.log(waypoints);
+        console.log("enc",routeOverViews[0]);
         console.log(n + 1);
       } catch (error) {
         console.error(error);
       }
+
       if (n != 0) {
         try {
-          const {manifest} = Constants
+          const { manifest } = Constants;
+
           const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
-        
           const response2 = await axios.post(uri+'/safestroute', {
             waypoints: waypoints,
             numberOfRoutes: n + 1,
@@ -95,10 +175,11 @@ const MapScreen = () => {
             sourcelatitude: source.latitude,
             sourcelongitude: source.longitude,
           }).then(data => data.data);
+
           console.log(response2.riskscores);
+
           const riskScores = response2.riskscores;
-          var risk;
-          risk=riskScores.map((e)=> {
+          var risk = riskScores.map((e)=> {
               risk = String(e);
               risk = risk.substring(7)
               console.log((risk));
@@ -108,25 +189,6 @@ const MapScreen = () => {
           })
           setAnswer(risk);
           setDispMap(true);
-        
-          
-          /*for (let i = 0; i < n; i++) {
-            routeRank[i] = i + 1;
-          }
-          for (let i = 0; i < riskScores.length; i++) {
-            for (let j = i + 1; j < riskScores.length - 1 - i; j++) {
-              if (riskScores[j + 1] < riskScores[j]) {
-                let temp = riskScores[j];
-                riskScores[j] = riskScores[j + 1];
-                riskScores[j + 1] = temp;
-                temp = routeRank[j];
-                routeRank[j] = routeRank[j + 1];
-                routeRank[j + 1] = temp;
-              }
-            }
-          }
-          console.log("Ranking of Routes: ", routeRank);
-            */
         }
         catch (error) {
           console.error(error);
@@ -134,6 +196,7 @@ const MapScreen = () => {
       }
      
   }
+
   return (
     <View style={styles.container}>
        <View style={styles.inputsec}>
@@ -153,10 +216,25 @@ const MapScreen = () => {
           longitudeDelta: 0.0421,
         }}
       >
-       
-
-        {/* Polyline to draw route */}
-       
+      {dispMap ? <Polyline
+        coordinates={routeOverViews[0]}
+        strokeWidth={5}
+        strokeColor="#00FF00"
+      />:null}
+      {dispMap ? <Polyline
+        coordinates={routeOverViews[1]}
+        strokeWidth={5}
+        strokeColor="#FF0000"
+      />:null}
+      {dispMap ? <Polyline
+        coordinates={routeOverViews[2]}
+        strokeWidth={5}
+        strokeColor="#0000FF"
+      />:null}
+      
+    {source && <Marker coordinate={source} />}
+    {destination && <Marker coordinate={destination} />}
+    {/* {routePoints && (<Polyline coordinates={routePoints} strokeColor="#000" strokeWidth={6}/>)} */}
       </MapView>
      
      {dispMap? <View style={{marginBottom: 20, marginLeft: 20, padding:10}}>
@@ -165,7 +243,7 @@ const MapScreen = () => {
               
               answer.map((i,j)=>{
                   return(
-                      <Text style={{color:"cadetblue", fontWeight: 'bold'}}>Route {j}:  {i}</Text>
+                      <Text style={{color:"cadetblue", fontWeight: 'bold'}} key={j}>Route {j}:  {i}</Text>
                   )
               })
           }
@@ -210,5 +288,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MapScreen;
-
+export default SafestRoute;

@@ -39,7 +39,7 @@ import MapViewDirections from 'react-native-maps-directions';
 import * as Location from 'expo-location';
 
 
-const MapScreen = ({route}) => {
+const DirectSpot = ({route}) => {
     const [location, setLocation] = useState(null);
     const [errorMessage, setErrorMessage] = useState(null);
     const [region, setRegion] = useState(null);
@@ -99,13 +99,13 @@ const MapScreen = ({route}) => {
                         <Marker
                             coordinate={{ latitude: location.coords.latitude, longitude: location.coords.longitude }}
                             title= "Your location"
-                            pinColor="blue"
+                            pinColor="lightblue"
                         />
                     )}
                     {hospitallat && hospitallong && (
                         <Marker
                             coordinate={{ latitude: hospitallat, longitude: hospitallong }}
-                            title="Safe Spot"
+                            title={`${route.params.hosp.name} (Safe Spot)`}
                             pinColor="red"
                         />
                     )}
@@ -122,7 +122,7 @@ const MapScreen = ({route}) => {
                         <Polyline
                             coordinates={routes}
                             strokeWidth={3}
-                            strokeColor="blue"
+                            strokeColor="cadetblue"
                         />
                     )}
                 </MapView>
@@ -132,4 +132,4 @@ const MapScreen = ({route}) => {
     );
 };
 
-export default MapScreen;
+export default DirectSpot;

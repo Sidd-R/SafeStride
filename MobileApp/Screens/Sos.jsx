@@ -48,9 +48,9 @@ export default function Sos ({navigation}) {
           body: formBody
       };
 
-      const {manifest} = Constants
-      const uri = `http://192.168.74.214:3010`;
+      const { manifest } = Constants;
 
+      const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
 
       await axios.post(uri+'/sendMessage').then(data => console.log(data.data)).catch(err => console.error(err))
       

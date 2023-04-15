@@ -4,11 +4,10 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './Screens/Home';
 import NearestSafeSpot from './Screens/NearestSafeSpot';
-import SafestRoute from './Screens/SafestRoute';
 import Sos from './Screens/Sos';
 import Login from './Screens/Login';
 import DirectSpot from './Screens/DirectSpot';
-import MapScreen from './Screens/SafestRoute';
+import SafestRoute from './Screens/SafestRoute';
 
 // Navigation
 const Drawer = createDrawerNavigator();
@@ -36,13 +35,13 @@ export default function App() {
           title:"Home",
           headerStyle:{
             backgroundColor: 'cadetblue',
-            height:100,  
+            height:90,  
           },
           headerStatusBarHeight:25,
           headerTintColor:'black'
         }}/>
         <Drawer.Screen name="Nearest Safe Spot" component={NearestSafeSpot} />
-        <Drawer.Screen name="Safest Route" component={MapScreen} />
+        <Drawer.Screen name="Safest Route" component={SafestRoute} />
         <Drawer.Screen name="S.O.S" component={Sos} />
         <Drawer.Screen name="Login" component={Login} />
         <Drawer.Screen name="DirectSpot" component={DirectSpot} />
