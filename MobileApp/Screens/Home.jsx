@@ -5,13 +5,13 @@ export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <TouchableOpacity onPress={() => navigation.navigate('Nearest Safe Spot',{navigation})}>
-          <Text style={styles.cardTitle}>Nearest Safe Spot</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Safest Route')}>
+          <Text style={styles.cardTitle}>Safest Route</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.card}>
-        <TouchableOpacity onPress={() => navigation.navigate('Safest Route')}>
-          <Text style={styles.cardTitle}>Safest Route</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Nearest Safe Spot',{navigation})} >
+          <Text style={styles.cardTitle}>Nearest Safe Spot</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.card}>
@@ -34,20 +34,20 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '80%',
-    height: 150,
+    height: 160,
     marginTop: 0,
     margin: 20,
     // marginBottom: 20,
     //backgroundColor: 'lightblue',
-    borderRadius: 10,
-    borderColor: 'lightblue',
-    borderWidth: 2,
-    borderBottomWidth: 2,
+    borderRadius: 14,
+    borderColor: 'cadetblue',
+    borderWidth: 4,
+    borderBottomWidth: 4,
     justifyContent: 'center',
     alignItems: 'center',
   },
   cardTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 23,
+    fontWeight: '400',
   },
 });

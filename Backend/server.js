@@ -66,26 +66,26 @@ app.post('/safestroute', async (req, res) => {
     waypointcount = 0
     while(index<waypoints.length && waypoints[index].route==i )
     {
-    console.log("latitude: ",waypoints[index].latitude);
-    console.log("longitude: ",waypoints[index].longitude);
-    console.log("time spent in this area: ",waypoints[index].duration);
-    let latitude=waypoints[index].latitude;
-    let longitude=waypoints[index].longitude;
-    console.log("start time: ",time);
-    let startTime = Math.round(time)
-    let duration=Number(waypoints[index].duration[0]+waypoints[index].duration[1]);
-    time=time+duration*1.0/60;
-    console.log("end time: ",time);
-    let endTime = Math.round(time)
-    let police = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=500&type=police&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
-    let metro = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=500&type=subway_station&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
-    console.log("metro in this area ",metro);
-    console.log("Police in this area: ",police);
-    index+=1;
-    let temp = await calculateSaftey(metro,police,latitude,longitude,startTime,endTime)
-    console.log('----------------------------------------------');
-    riskscore += Number(temp)
-    waypointcount += 1
+      console.log("latitude: ",waypoints[index].latitude);
+      console.log("longitude: ",waypoints[index].longitude);
+      console.log("time spent in this area: ",waypoints[index].duration);
+      let latitude=waypoints[index].latitude;
+      let longitude=waypoints[index].longitude;
+      console.log("start time: ",time);
+      let startTime = Math.round(time)
+      let duration=Number(waypoints[index].duration[0]+waypoints[index].duration[1]);
+      time=time+duration*1.0/60;
+      console.log("end time: ",time);
+      let endTime = Math.round(time)
+      let police = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=500&type=police&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
+      let metro = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=500&type=subway_station&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
+      console.log("metro in this area ",metro);
+      console.log("Police in this area: ",police);
+      index+=1;
+      let temp = await calculateSaftey(metro,police,latitude,longitude,startTime,endTime)
+      console.log('----------------------------------------------');
+      riskscore += Number(temp)
+      waypointcount += 1
     }
     riskscoreArray.push(riskscore/waypointcount);
     i++;

@@ -1,8 +1,11 @@
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Dimensions, Text, TextInput, Button, TouchableOpacity, ToggleButton } from 'react-native';
-const GOOGLE_MAPS_API_KEY = 'AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
+import Constants from "expo-constants";
 import axios from 'axios';
+
+const GOOGLE_MAPS_API_KEY = 'AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
+
 const MapScreen = () => {
   // Source and Destination coordinates
   const [source,setSource] = useState({ latitude:28.66969942317484,  longitude:77.09303425361844 });
@@ -79,7 +82,10 @@ const MapScreen = () => {
       }
       if (n != 0) {
         try {
-          const response2 = await axios.post('http://192.168.74.214:3010/', {
+          const {manifest} = Constants
+          const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
+        
+          const response2 = await axios.post(uri+'/safestroute', {
             waypoints: waypoints,
             numberOfRoutes: n + 1,
             destlatitude: destination.latitude,
