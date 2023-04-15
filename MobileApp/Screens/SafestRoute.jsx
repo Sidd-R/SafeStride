@@ -14,6 +14,8 @@ const MapScreen = () => {
   const [destAddress,setDestAddress]=useState("");
   const waypoints=[];
   const [routeRank, setRouteRank] = useState("");
+  const [answer,setAnswer]=useState([]);
+  const [dispMap, setDispMap] = useState(false)
   // Polyline coordinates
   const polylineCoords = [
     source,
@@ -95,6 +97,19 @@ const MapScreen = () => {
           }).then(data => data.data);
           console.log(response2.riskscores);
           const riskScores = response2.riskscores;
+          var risk;
+          risk=riskScores.map((e)=> {
+              risk = String(e);
+              risk = risk.substring(7)
+              console.log((risk));
+              e="0."+risk;
+              console.log(e);
+              return e;
+          })
+          setAnswer(risk);
+          setDispMap(true);
+        
+          
           /*for (let i = 0; i < n; i++) {
             routeRank[i] = i + 1;
           }
@@ -143,6 +158,19 @@ const MapScreen = () => {
         {/* Polyline to draw route */}
        
       </MapView>
+     
+     {dispMap? <View style={{marginBottom: 20, marginLeft: 20, padding:10}}>
+          <Text style={{color:"blue", fontSize: 20}}>The Routes with their riskscores are</Text>
+          {
+              
+              answer.map((i,j)=>{
+                  return(
+                      <Text style={{color:"cadetblue", fontWeight: 'bold'}}>Route {j}:  {i}</Text>
+                  )
+              })
+          }
+      
+      </View>:null}
     </View>
   );
 };
@@ -183,3 +211,4 @@ const styles = StyleSheet.create({
 });
 
 export default MapScreen;
+
