@@ -216,6 +216,7 @@ const SafestRoute = () => {
           longitudeDelta: 0.0421,
         }}
       >
+        {/*display thr routes (here max 3 routes) */ }
       {dispMap ? <Polyline
         coordinates={routeOverViews[0]}
         strokeWidth={5}
