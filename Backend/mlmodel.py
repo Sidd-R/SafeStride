@@ -42,10 +42,9 @@ x2=float(sys.argv[2]) #lon
 x3=int(sys.argv[4]) #metro
 x4=int(sys.argv[3]) #police
 x5=20000
-    # yy=df2['number(sh)'][x]
+
 
 X1=[[x2,x1,x5,x4,x3,t,et]]
 
 y_pred=regressor.predict(X1)
-# print(y_pred/yy)
 print(y_pred[0])
