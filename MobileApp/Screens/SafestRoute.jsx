@@ -199,13 +199,18 @@ const SafestRoute = () => {
 
   return (
     <View style={styles.container}>
-       <View style={styles.inputsec}>
+      <View style={styles.inputsec} className="bg-cyan-700">
         <TextInput style={styles.input} placeholder='Source' onChangeText={setSourceAddress}  />
         <TextInput style={styles.input} placeholder='destination' onChangeText={setDestAddress} />
         <TouchableOpacity style={styles.button} onPress={changeMap}>
           <Text style={styles.buttonText} >Go</Text>
         </TouchableOpacity>
       </View>
+      {!dispMap?<View className=" h-14 bg-cyan-700">
+        {answer.length > 0?<View></View>:null}
+        {answer.length > 1?<View></View>:null}
+        {answer.length > 2?<View></View>:null}
+      </View>:null}
         
       <MapView
         style={styles.map}
@@ -262,30 +267,32 @@ const styles = StyleSheet.create({
       flex: 1,
   },
   inputsec: {
-    backgroundColor: 'cadetblue',
+    // backgroundColor: 'cadetblue',
   },
   button: {
     color: 'cadetblue',
-    height: 20,
     backgroundColor: 'lightblue',
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
-    marginLeft: 40,
-    marginRight: 30,
-    marginBottom: 10,
+    marginTop: 20,
+    marginLeft: "10%",
+    padding: 12,
+    marginBottom: 20,
+    width: "80%"
   },
   input: {
     backgroundColor: 'white',
-    marginLeft: 40,
-    marginRight: 50,
-    marginBottom: 5,
-    marginTop: 10,
+    marginLeft: "10%",
+    // marginRight: 50,
+    // marginBottom: 5,
+    marginTop: 20,
     borderRadius: 10,
     fontSize: 10,
     paddingLeft: 10,
-  },
+    height: 40,
+    width:"80%"
+  }
 });
 
 export default SafestRoute;
