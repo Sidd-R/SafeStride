@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-nativ
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 import {DATABASE_API_KEY} from '@env'
-
+import {Button} from '@rneui/themed'
 const firebaseConfig = {
   apiKey: DATABASE_API_KEY,
   authDomain: "safestride-655dd.firebaseapp.com",
@@ -34,6 +34,7 @@ export default function Login({navigation}) {
 
   return (
     <View style={styles.container}>
+      <Button/>
       <Text style={styles.heading}>Login</Text>
       <TextInput
         style={styles.input}
@@ -49,6 +50,7 @@ export default function Login({navigation}) {
         onChangeText={setPassword}
         secureTextEntry={true}
       />
+      {/* <Butt */}
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
