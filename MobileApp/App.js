@@ -15,10 +15,10 @@ const Drawer = createDrawerNavigator();
 export default function App() {
   const theme = createTheme({
     lightColors: {
-      primary: '#f00',
+      primary: 'aliceblue',
     },
     darkColors: {
-      primary: '#0f0',
+      primary: 'rgb(32, 136, 192)',
     },
     mode: 'light',
   });
