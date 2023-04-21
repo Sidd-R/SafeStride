@@ -12,9 +12,9 @@ export default function Sos ({navigation}) {
   
   const sendSOS = async () => {
     try {
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-      myHeaders.append("Authorization", "Basic QUM4NWNjNzRhNGE0NDBiZmNkODJhODdhZjM3MzllNmFhZDozYTc2OGJkZDE5NDMwYjY5ODkzZjMxYmNjNDE5M2E2Ng==");
+      // var myHeaders = new Headers();
+      // myHeaders.append("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+      // myHeaders.append("Authorization", "Basic QUM4NWNjNzRhNGE0NDBiZmNkODJhODdhZjM3MzllNmFhZDozYTc2OGJkZDE5NDMwYjY5ODkzZjMxYmNjNDE5M2E2Ng==");
 
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -24,8 +24,6 @@ export default function Sos ({navigation}) {
 
       let location = await Location.getCurrentPositionAsync({});
       let { latitude, longitude } = location.coords;
-      setLat(latitude)
-      setlong(longitude)
 
       var details = {
         'Body': 'msg from frntd',
@@ -34,25 +32,25 @@ export default function Sos ({navigation}) {
 
       }
 
-      var formBody = [];
-      for (var property in details) {
-        var encodedKey = encodeURIComponent(property);
-        var encodedValue = encodeURIComponent(details[property]);
-        formBody.push(encodedKey + "=" + encodedValue);
-      }
-      formBody = formBody.join("&");
+      // var formBody = [];
+      // for (var property in details) {
+      //   var encodedKey = encodeURIComponent(property);
+      //   var encodedValue = encodeURIComponent(details[property]);
+      //   formBody.push(encodedKey + "=" + encodedValue);
+      // }
+      // formBody = formBody.join("&");
 
-        var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: formBody
-      };
+      //   var requestOptions = {
+      //     method: 'POST',
+      //     headers: myHeaders,
+      //     body: formBody
+      // };
 
       const { manifest } = Constants;
 
       const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
 
-      await axios.post(uri+'/sendMessage').then(data => console.log(data.data)).catch(err => console.error(err))
+      await axios.post(uri+'/sendMessage',{latitude:latitude,longitude:longitude}).then(data => console.log(data.data)).catch(err => console.error(err))
       
 
       //  await fetch("https://api.twilio.com/2010-04-01/Accounts/AC85cc74a4a440bfcd82a87af3739e6aad/Messages.json", requestOptions)
@@ -65,7 +63,7 @@ export default function Sos ({navigation}) {
 
     }
     catch (error) {
-        console.log("Error");
+        console.log(error);
     }
 }
   const [sosRequested, setSosRequested] = useState(false);
