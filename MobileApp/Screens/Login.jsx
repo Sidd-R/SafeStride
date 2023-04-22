@@ -62,22 +62,8 @@ const Login = ({navigation}) => {
     }
     ToastAndroid.show('Login Successfull',ToastAndroid.SHORT)
     setLoading(false);
-    // navigation.navigate('Home')
-    //     console.log(responseJson);
-    //     // If server response message same as Data Matched
-    //     if (responseJson.status === 'success') {
-          await AsyncStorage.setItem('user_id', userEmail);
-          navigation.replace('DrawerNavigationRoutes');
-    //     } else {
-    //       setErrortext(responseJson.msg);
-    //       console.log('Please check your email id or password');
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     //Hide Loader
-    //     setLoading(false);
-    //     console.error(error);
-    //   });
+    await AsyncStorage.setItem('user_id', userEmail);
+    navigation.replace('DrawerNavigationRoutes');
   };
 
   return (

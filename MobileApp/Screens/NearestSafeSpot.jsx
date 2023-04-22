@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import * as Location from 'expo-location';
 import axios from 'axios';
-import DirectSpot from './DirectSpot'
 import { LogBox } from 'react-native';
+import {GOOGLE_MAPS_API_KEY} from '@env'
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY'
+
 
 const NEARBY_SEARCH_RADIUS = 200; // Search radius in meters
 

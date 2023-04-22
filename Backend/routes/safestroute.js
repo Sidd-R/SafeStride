@@ -5,13 +5,8 @@ const { default: axios } = require('axios');
 const router = express.Router();
 
 
-router.post('/', async (req, res) => {
+router.post('', async (req, res) => {
   let riskscoreArray = []
-  // console.log('f');
-  // let temp = await calculateSaftey(2,2,19.2054785,72.8500442,20,22)
-  //   console.log(temp);
-  // console.log(req.body.waypoints); //array with latitude, longitude, route number and time
-  // console.log(req.body.numberOfRoutes);
   var time = 12;
   const waypoints=req.body.waypoints;
   const n=req.body.numberOfRoutes;
@@ -36,8 +31,8 @@ router.post('/', async (req, res) => {
     time=time+duration*1.0/60;
     console.log("end time: ",time);
     let endTime = Math.round(time)
-    let police = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=500&type=police&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
-    let metro = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=500&type=subway_station&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
+    let police = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=500&type=police&key=${process.env.GOOGLE_MAPS_API_KEY}`).then(data => data.data.results.length)
+    let metro = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=500&type=subway_station&key=${process.env.GOOGLE_MAPS_API_KEY}`).then(data => data.data.results.length)
     console.log("metro in this area ",metro);
     console.log("Police in this area: ",police);
     index+=8;
@@ -48,17 +43,7 @@ router.post('/', async (req, res) => {
     }
     riskscoreArray.push(riskscore/waypointcount);
     i++;
-    
-    //
-    //console.log(metro,police,latitude,longitude,startTime,endTime);
-    // let temp = await calculateSaftey(metro,police,latitude,longitude,startTime,endTime)
-    // console.log(temp);
-    //riskscore += Number(temp)
-    // temp.then((data) => {console.log(data);})
   }
-  // const result = await calculateSaftey(p)
-  // console.log(result,'r');
-  // result.then(data => res.json({data:data}))
   res.json({riskscores: riskscoreArray})
 })
 
@@ -69,8 +54,8 @@ router.post('/safetyArea', async (req,res)=>{
   const latitude=req.body.sourcelat;
   const longitude=req.body.sourcelong;
   const radius=500;
-  let police = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=police&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
-  let metro = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=subway_station&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(data => data.data.results.length)
+  let police = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=police&key=${process.env.GOOGLE_MAPS_API_KEY}`).then(data => data.data.results.length)
+  let metro = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=subway_station&key=${process.env.GOOGLE_MAPS_API_KEY}`).then(data => data.data.results.length)
   let startTime = Number(new Date().getHours())
   let endTime = startTime + 1
   console.log(metro,police,latitude,longitude,startTime,endTime);

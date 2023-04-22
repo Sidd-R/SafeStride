@@ -45,9 +45,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 4,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#106ffe',
   },
   cardTitle: {
     fontSize: 23,
-    fontWeight: '400',
+    fontWeight: '800',
+    color: 'white',
   },
 });

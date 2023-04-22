@@ -50,8 +50,18 @@ export default function Sos ({navigation}) {
 
       const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
 
-      await axios.post(uri+'/sendMessage',{latitude:latitude,longitude:longitude}).then(data => console.log(data.data)).catch(err => console.error(err))
-      
+      await axios.post(uri+'/sos/sms',{latitude:latitude,longitude:longitude}).then(data => console.log(data.data))
+                  .catch(err => {
+                    console.error(err)
+                    alert('sos Failed')
+                  })
+      await axios.get(uri+'/sos/call',).then(data => console.log(data.data))
+                .catch(err => {
+                  console.error(err)
+                  alert('sos Failed')
+                  setSosSent(false)
+                  return
+                })
 
       //  await fetch("https://api.twilio.com/2010-04-01/Accounts/AC85cc74a4a440bfcd82a87af3739e6aad/Messages.json", requestOptions)
       //    .then(response => response.text())
