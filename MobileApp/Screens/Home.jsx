@@ -10,12 +10,12 @@ export default function Home({ navigation }) {
         </TouchableOpacity>
       </View>
       <View style={styles.card}>
-        <TouchableOpacity onPress={() => navigation.navigate('Nearest Safe Spot',{navigation})} >
+        <TouchableOpacity onPress={() => navigation.navigate('nsf',{navigation})} >
           <Text style={styles.cardTitle}>Nearest Safe Spot</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.card}>
-        <TouchableOpacity onPress={() => navigation.navigate('S.O.S')}>
+        <TouchableOpacity onPress={() => navigation.navigate('SOS')}>
           <Text style={styles.cardTitle}>S O S</Text>
         </TouchableOpacity>
       </View>
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     // marginBottom: 20,
     //backgroundColor: 'lightblue',
     borderRadius: 14,
-    borderColor: 'cadetblue',
+    borderColor: '#106ffe',
     borderWidth: 4,
     borderBottomWidth: 4,
     justifyContent: 'center',

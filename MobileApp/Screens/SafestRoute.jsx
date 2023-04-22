@@ -199,14 +199,14 @@ const SafestRoute = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputsec} className="bg-cyan-700">
+      <View style={styles.inputsec} >
         <TextInput style={styles.input} placeholder='Source' onChangeText={setSourceAddress}  />
         <TextInput style={styles.input} placeholder='destination' onChangeText={setDestAddress} />
         <TouchableOpacity style={styles.button} onPress={changeMap}>
           <Text style={styles.buttonText} >Go</Text>
         </TouchableOpacity>
       </View>
-      {!dispMap?<View className=" h-14 bg-cyan-700">
+      {!dispMap?<View className=" h-14" style={{backgroundColor:'#106ffe'}}>
         {answer.length > 0?<View></View>:null}
         {answer.length > 1?<View></View>:null}
         {answer.length > 2?<View></View>:null}
@@ -268,11 +268,11 @@ const styles = StyleSheet.create({
       flex: 1,
   },
   inputsec: {
-    // backgroundColor: 'cadetblue',
+    backgroundColor: '#106ffe',
   },
   button: {
-    color: 'cadetblue',
-    backgroundColor: 'lightblue',
+    color: '#106ffe',
+    backgroundColor: 'aliceblue',
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',

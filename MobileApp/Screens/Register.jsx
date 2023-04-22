@@ -1,7 +1,3 @@
-// Example of Splash, Login and Sign Up in React Native
-// https://aboutreact.com/react-native-login-and-signup/
-
-// Import React and Component
 import React, {useState, createRef, useEffect} from 'react';
 import {
   StyleSheet,
@@ -71,7 +67,7 @@ const Register = (props) => {
       alert('Please fill Password');
       return;
     }
-    //Show Loader
+
     setLoading(true);
     var dataToSend = {
       name: userName,
@@ -91,44 +87,9 @@ const Register = (props) => {
     await setDoc(doc(db, "users", userEmail), dataToSend);
     ToastAndroid.show('Registration Successfull',ToastAndroid.SHORT)
     props.navigation.navigate('Login')
-    // var formBody = [];
-    // for (var key in dataToSend) {
-    //   var encodedKey = encodeURIComponent(key);
-    //   var encodedValue = encodeURIComponent(dataToSend[key]);
-    //   formBody.push(encodedKey + '=' + encodedValue);
-    // }
-    // formBody = formBody.join('&');
-
-    // fetch('http://localhost:3000/api/user/register', {
-    //   method: 'POST',
-    //   body: formBody,
-    //   headers: {
-    //     //Header Defination
-    //     'Content-Type':
-    //     'application/x-www-form-urlencoded;charset=UTF-8',
-    //   },
-    // })
-    //   .then((response) => response.json())
-    //   .then((responseJson) => {
-        //Hide Loader
         setLoading(false);
-        // console.log(responseJson);
-        // If server response message same as Data Matched
-        // if (responseJson.status === 'success') {
-        //   setIsRegistraionSuccess(true);
-        //   console.log(
-        //     'Registration Successful. Please Login to proceed'
-        //   );
-        // } else {
-        //   setErrortext(responseJson.msg);
-        // }
-      // })
-      // .catch((error) => {
-      //   //Hide Loader
-      //   setLoading(false);
-      //   console.error(error);
-      // });
   };
+
   if (isRegistraionSuccess) {
     return (
       <View
@@ -143,7 +104,7 @@ const Register = (props) => {
             width: Dimensions.get('window').width*0.7,
             height: Dimensions.get('window').width*0.7,
             resizeMode: 'contain',
-            margin: 30,
+            // margin: 30,
           }}
         />
         <Text style={styles.successTextStyle}>
@@ -171,10 +132,10 @@ const Register = (props) => {
           <Image
             source={require('../assets/SafeStrideLogo.png')}
             style={{
-              width: Dimensions.get('window').width*0.5,
-              height: Dimensions.get('window').width*0.5,
+              width: Dimensions.get('window').width*0.7,
+              height: Dimensions.get('window').width*0.7,
               resizeMode: 'contain',
-              margin: 30,
+              marginTop: 60,
             }}
           />
         </View>
@@ -274,6 +235,12 @@ const Register = (props) => {
             onPress={handleSubmitButton}>
             <Text style={styles.buttonTextStyle}>REGISTER</Text>
           </TouchableOpacity>
+          <Text
+              style={styles.registerTextStyle}
+              onPress={() => props.navigation.navigate('Login')}>
+              <Text className='text-black'>Already a user ? </Text>
+              Login
+            </Text>
         </KeyboardAvoidingView>
       </ScrollView>
     </View>
@@ -285,7 +252,7 @@ const styles = StyleSheet.create({
   SectionStyle: {
     flexDirection: 'row',
     height: 40,
-    marginTop: 20,
+    // marginTop: 20,
     marginLeft: 35,
     marginRight: 35,
     margin: 10,
@@ -327,5 +294,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     padding: 30,
+  },
+  registerTextStyle: {
+    color: 'cornflowerblue',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 14,
+    alignSelf: 'center',
+    padding: 10,
   },
 });

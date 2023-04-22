@@ -10,9 +10,12 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 
 // Import Screens
 import Home from './Home';
+import Sos from './Sos'
 // import SettingsScreen from './DrawerScreens/SettingsScreen';
 import CustomSidebarMenu from '../components/CustomSidebarMenu';
 import NavigationDrawerHeader from '../components/NavigationDrawerHeader';
+import NearestSafeSpot from './NearestSafeSpot';
+import SafestRoute from './SafestRoute';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -29,7 +32,7 @@ const HomeStack = ({navigation}) => {
             <NavigationDrawerHeader navigationProps={navigation} />
           ),
           headerStyle: {
-            backgroundColor: '#307ecc', //Set Header color
+            backgroundColor: '#106ffe', //Set Header color
           },
           headerTintColor: '#fff', //Set Header text color
           headerTitleStyle: {
@@ -41,16 +44,16 @@ const HomeStack = ({navigation}) => {
   );
 };
 
-const settingScreenStack = ({navigation}) => {
+const SOSScreenStack = ({navigation}) => {
   return (
     <Stack.Navigator
-      initialRouteName="SettingsScreen"
+      initialRouteName="SOS"
       screenOptions={{
         headerLeft: () => (
           <NavigationDrawerHeader navigationProps={navigation} />
         ),
         headerStyle: {
-          backgroundColor: '#307ecc', //Set Header color
+          backgroundColor: '#106ffe', //Set Header color
         },
         headerTintColor: '#fff', //Set Header text color
         headerTitleStyle: {
@@ -58,8 +61,8 @@ const settingScreenStack = ({navigation}) => {
         },
       }}>
       <Stack.Screen
-        name="SettingsScreen"
-        component={SettingsScreen}
+        name="SOS"
+        component={Sos}
         options={{
           title: 'Settings', //Set Header Title
         }}
@@ -82,15 +85,25 @@ const DrawerNavigatorRoutes = (props) => {
       screenOptions={{headerShown: false}}
       drawerContent={CustomSidebarMenu}>
       <Drawer.Screen
-        name="homeStack"
-        options={{drawerLabel: 'Home Screen'}}
+        name="home"
+        options={{drawerLabel: 'Home',drawerLabelStyle:{color: 'white'}}}
         component={HomeStack}
       />
-      {/* <Drawer.Screen
-        name="settingScreenStack"
-        options={{drawerLabel: 'Setting Screen'}}
-        component={settingScreenStack}
-      /> */}
+      <Drawer.Screen
+        name="SOS"
+        options={{drawerLabel: 'SOS',drawerLabelStyle:{color: 'white'}}}
+        component={SOSScreenStack}
+      />
+      <Drawer.Screen 
+       name='nsf' 
+       options={{drawerLabel: 'Nearby SafeSpots',drawerLabelStyle:{color: 'white'},headerShown:true}}
+       component={NearestSafeSpot}
+      />
+      <Drawer.Screen
+        name='Safest Route'
+        options={{drawerLabel: 'Safest Route',drawerLabelStyle:{color: 'white'},headerShown:true}}
+        component={SafestRoute}
+      />
     </Drawer.Navigator>
   );
 };

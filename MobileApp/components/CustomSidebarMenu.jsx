@@ -114,7 +114,7 @@
 // https://aboutreact.com/react-native-login-and-signup/
 
 // Import React and Component
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {View, Text, Alert, StyleSheet} from 'react-native';
 
 import {
@@ -125,17 +125,32 @@ import {
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+
+
 const CustomSidebarMenu = (props) => {
+  const [email, setEmail] = useState('User')
+
+  const getEmail = async () => {
+    const userEmail = await AsyncStorage.getItem('user_id').then((value) => value);
+    // console.log(email,typeof(email));
+    setEmail(userEmail);
+  }
+
+  useEffect(() => {
+    getEmail()
+  }, [])
+  
+  
   return (
     <View style={stylesSidebar.sideMenuContainer}>
       <View style={stylesSidebar.profileHeader}>
         <View style={stylesSidebar.profileHeaderPicCircle}>
-          <Text style={{fontSize: 25, color: '#307ecc'}}>
-            {'About React'.charAt(0)}
+          <Text style={{fontSize: 25, color: '#106ffe'}}>
+            {email.charAt(0)}
           </Text>
         </View>
         <Text style={stylesSidebar.profileHeaderText}>
-          AboutReact
+          {email}
         </Text>
       </View>
       <View style={stylesSidebar.profileHeaderLine} />
@@ -144,7 +159,7 @@ const CustomSidebarMenu = (props) => {
         <DrawerItemList {...props} />
         <DrawerItem
           label={({color}) => 
-            <Text style={{color: '#d8d8d8'}}>
+            <Text style={{color: 'white'}}>
               Logout
             </Text>
           }
@@ -183,20 +198,20 @@ const stylesSidebar = StyleSheet.create({
   sideMenuContainer: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#307ecc',
+    backgroundColor: '#106ffe',
     paddingTop: 40,
     color: 'white',
   },
   profileHeader: {
     flexDirection: 'row',
-    backgroundColor: '#307ecc',
+    backgroundColor: '#106ffe',
     padding: 15,
     textAlign: 'center',
   },
   profileHeaderPicCircle: {
     width: 60,
     height: 60,
-    borderRadius: 60 / 2,
+    borderRadius: 30,
     color: 'white',
     backgroundColor: '#ffffff',
     textAlign: 'center',
@@ -206,7 +221,7 @@ const stylesSidebar = StyleSheet.create({
   profileHeaderText: {
     color: 'white',
     alignSelf: 'center',
-    paddingHorizontal: 10,
+    marginHorizontal: 15,
     fontWeight: 'bold',
   },
   profileHeaderLine: {
