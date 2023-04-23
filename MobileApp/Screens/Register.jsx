@@ -17,6 +17,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDoc,doc,setDoc, } from 'firebase/firestore';
 import {DATABASE_API_KEY} from '@env'
 import {Button} from '@rneui/themed'
+import { LinearGradient } from 'expo-linear-gradient';
 
 const firebaseConfig = {
   apiKey: DATABASE_API_KEY,
@@ -101,8 +102,8 @@ const Register = (props) => {
         <Image
           source={require('../assets/SafeStrideLogo.png')}
           style={{
-            width: Dimensions.get('window').width*0.7,
-            height: Dimensions.get('window').width*0.7,
+            width: Dimensions.get('window').width*0.2,
+            height: Dimensions.get('window').width*0.2,
             resizeMode: 'contain',
             // margin: 30,
           }}
@@ -132,10 +133,11 @@ const Register = (props) => {
           <Image
             source={require('../assets/SafeStrideLogo.png')}
             style={{
-              width: Dimensions.get('window').width*0.7,
-              height: Dimensions.get('window').width*0.7,
+              width: Dimensions.get('window').width*0.9,
+              height: Dimensions.get('window').width*0.9,
               resizeMode: 'contain',
-              marginTop: 60,
+              marginTop: 40,
+              marginBottom: -30,
             }}
           />
         </View>
@@ -229,12 +231,13 @@ const Register = (props) => {
               {errortext}
             </Text>
           ) : null}
+           <LinearGradient colors={['#F6A684','#F61956']}  style={styles.buttonStyle}>
           <TouchableOpacity
-            style={styles.buttonStyle}
             activeOpacity={0.5}
             onPress={handleSubmitButton}>
             <Text style={styles.buttonTextStyle}>REGISTER</Text>
           </TouchableOpacity>
+          </LinearGradient>
           <Text
               style={styles.registerTextStyle}
               onPress={() => props.navigation.navigate('Login')}>

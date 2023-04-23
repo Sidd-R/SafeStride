@@ -12,6 +12,7 @@ import {
   Dimensions,
   ToastAndroid,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDoc,doc,setDoc, } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -78,14 +79,16 @@ const Login = ({navigation}) => {
         }}>
         <View>
           <KeyboardAvoidingView enabled>
-            <View style={{alignItems: 'center'}}>
+            <View style={{alignItems: 'center',
+          alignContent: 'center'}}>
               <Image
                 source={require('../assets/SafeStrideLogo.png')}
                 style={{
-                  width: Dimensions.get('window').width*0.7,
-                  height: Dimensions.get('window').width*0.7,
+                  marginLeft: 15,
+                  width: Dimensions.get('window').width*1.2,
+                  height: Dimensions.get('window').width*0.99,
                   resizeMode: 'contain',
-                  margin: 30,
+                  //margin: 20,
                 }}
               />
             </View>
@@ -130,12 +133,13 @@ const Login = ({navigation}) => {
                 {errortext}
               </Text>
             ) : null}
+             <LinearGradient colors={['#F6A684','#F61956']}  style={styles.buttonStyle}>
             <TouchableOpacity
-              style={styles.buttonStyle}
               activeOpacity={0.5}
               onPress={handleSubmitPress}>
               <Text style={styles.buttonTextStyle}>LOGIN</Text>
             </TouchableOpacity>
+            </LinearGradient>
             <Text
               style={styles.registerTextStyle}
               onPress={() => navigation.navigate('Register')}>
@@ -160,7 +164,7 @@ const styles = StyleSheet.create({
   SectionStyle: {
     flexDirection: 'row',
     height: 40,
-    marginTop: 20,
+    marginTop: 10,
     marginLeft: 35,
     marginRight: 35,
     margin: 10,
@@ -185,7 +189,7 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     flex: 1,
-    color: '#111',
+    color: 'red',
     paddingLeft: 15,
     paddingRight: 15,
     borderWidth: 1,
@@ -193,7 +197,7 @@ const styles = StyleSheet.create({
     borderColor: '#dadae8',
   },
   registerTextStyle: {
-    color: 'cornflowerblue',
+    color: 'red',
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 14,
