@@ -1,23 +1,33 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
+      <View>
+      <View > 
+      <LinearGradient colors={['#F6A684','#F61956']} start={{x: 0.1, y: 0.2} } style={styles.card}>
         <TouchableOpacity onPress={() => navigation.navigate('Safest Route')}>
+       
           <Text style={styles.cardTitle}>Safest Route</Text>
         </TouchableOpacity>
+        </LinearGradient>
       </View>
-      <View style={styles.card}>
+      <View >
+      <LinearGradient colors={['#F6A684','#F61956']} start={{x: 0.1, y: 0.2} } style={styles.card}>
         <TouchableOpacity onPress={() => navigation.navigate('nsf',{navigation})} >
           <Text style={styles.cardTitle}>Nearest Safe Spot</Text>
         </TouchableOpacity>
+        </LinearGradient>
       </View>
-      <View style={styles.card}>
+      <View >
+      <LinearGradient colors={['#F6A684','#F61956']} start={{x: 0.1, y: 0.2} } style={styles.card}>
         <TouchableOpacity onPress={() => navigation.navigate('SOS')}>
           <Text style={styles.cardTitle}>S O S</Text>
         </TouchableOpacity>
+        </LinearGradient>
+      </View>
       </View>
 
     </View>
@@ -33,23 +43,24 @@ const styles = StyleSheet.create({
     paddingTop: 40
   },
   card: {
-    width: '80%',
-    height: 160,
+    width: 350,
+    height: 140,
     marginTop: 0,
-    margin: 20,
+    margin: 15,
     // marginBottom: 20,
-    //backgroundColor: 'lightblue',
+    //borderColor: 'lightgrey',
     borderRadius: 14,
-    borderColor: '#106ffe',
-    borderWidth: 4,
-    borderBottomWidth: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#106ffe',
+    //borderBottomWidth: 4,
+    //borderRightWidth: 4,
+    
+    
+    
   },
   cardTitle: {
     fontSize: 23,
-    fontWeight: '800',
+    fontWeight: '500',
     color: 'white',
+    marginLeft: 140,
+    marginTop: 20,
   },
 });

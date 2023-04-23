@@ -1,12 +1,12 @@
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Dimensions, Text, TextInput, Button, TouchableOpacity, ToggleSButton, Alert } from 'react-native';
-import {GOOGLE_MAPS_API_KEY} from '@env'
+//import {GOOGLE_MAPS_API_KEY} from '@env'
 import axios from 'axios';
 import Constants from "expo-constants";
 import { ButtonGroup } from '@rneui/themed'
 import Loader from '../components/Loader';
-
+const GOOGLE_MAPS_API_KEY='AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
 const decodePolyline = (encoded) => {
   const poly = [];
   let index = 0;
