@@ -30,7 +30,8 @@ const SplashScreen = ({navigation}) => {
       );
     }, 1000);
   }, []);
-
+//changed image
+//changed dimensions a bit
   return (
     <View style={styles.container}>
       <Image
