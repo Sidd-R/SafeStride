@@ -189,6 +189,7 @@ const CustomSidebarMenu = (props) => {
         />
       </DrawerContentScrollView>
     </View>
+   
   );
 };
 
@@ -198,13 +199,13 @@ const stylesSidebar = StyleSheet.create({
   sideMenuContainer: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#106ffe',
+    backgroundColor: '#FC576D',
     paddingTop: 40,
     color: 'white',
   },
   profileHeader: {
     flexDirection: 'row',
-    backgroundColor: '#106ffe',
+    //backgroundColor: 'red',
     padding: 15,
     textAlign: 'center',
   },
@@ -212,11 +213,12 @@ const stylesSidebar = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    color: 'white',
+    color: 'red',
     backgroundColor: '#ffffff',
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
+
   },
   profileHeaderText: {
     color: 'white',
