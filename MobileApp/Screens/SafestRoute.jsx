@@ -7,6 +7,8 @@ import Constants from "expo-constants";
 import { ButtonGroup } from '@rneui/themed'
 import Loader from '../components/Loader';
 const GOOGLE_MAPS_API_KEY='AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
+import { uri } from '../uri';
+
 const decodePolyline = (encoded) => {
   const poly = [];
   let index = 0;
@@ -49,7 +51,7 @@ const decodePolyline = (encoded) => {
   return poly;
 };  
 
-const SafestRoute = () => {
+const SafestRoute = ({navigation}) => {
   const mapRef = useRef(null)
 
   const [selectedRoute, setSelectedRoute] = useState(0)
@@ -145,8 +147,9 @@ const SafestRoute = () => {
       }
 
         try {
-          const { manifest } = Constants;
-          const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
+          // const { manifest } = Constants;
+          // const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
+          // const uri = 'https://99a5-2409-40c0-6c-4c4f-cd4c-7ec9-5e46-d88e.ngrok-free.app'
           const riskScores = await axios.post(uri+'/safestroute', {
             waypoints: waypoints,
             numberOfRoutes: n + 1,
@@ -156,17 +159,42 @@ const SafestRoute = () => {
             sourcelongitude: source.longitude,
           }).then(data => data.data.riskscores);
 
-          riskScores.sort()
-
           riskScores.forEach((e,i)=> {
               e = String(e);
               e = e.substring(7)
               riskScores[i]="0."+e;
+              riskScores[i] = Number(riskScores[i])
           })
+
+          riskScores.sort()
 
           if (riskScores.length == 3) setButtons(['route1','route2','route3'])
           else if (riskScores.length == 2) setButtons(['route1','route2'])
           else setButtons(['route1'])
+
+          if (riskScores[0] > 5) {
+            Alert.alert(
+              'Warning',
+              'The riskscore of the availaible routes is beyond the safety index, It is suggested that you go to a safe spot.',
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => {
+                    return null;
+                  },
+                },
+                {
+                  text: 'Proceed',
+                  onPress: () => {
+                    navigation.navigate('nsf');
+                  },
+                },
+              ],
+              {cancelable: false},
+            );
+          }
+       
+
           console.log(buttons);
           console.log(riskScores.length);
           console.log(riskScores);
@@ -240,12 +268,11 @@ const SafestRoute = () => {
       </MapView>
      
      {dispMap? <View style={{marginBottom: 20, marginLeft: 20, padding:10}}>
-          <Text style={{color:"blue", fontSize: 20}}>The Routes with their riskscores are</Text>
+          <Text style={{color:"#F6A684", fontSize: 20}}>The safety ranking of available routes are:</Text>
           {
-              
               answer.map((i,j)=>{
                   return(
-                      <Text style={{color:"cadetblue", fontWeight: 'bold'}} key={j}>Route {j}:  {i}</Text>
+                      <Text style={{color:"black", fontWeight: 'bold'}} key={j}>{j+1}. Route {j+1} safety index {1-i}</Text>
                   )
               })
           }

@@ -4,9 +4,7 @@ const axios = require('axios');
 
 const router = express.Router()
 
-const accountSid = 'AC85cc74a4a440bfcd82a87af3739e6aad'; // Your Account SID from www.twilio.com/console
-const authToken = '3a768bdd19430b69893f31bcc4193a66'; // Your Auth Token from www.twilio.com/console
-const client = twilio(accountSid, authToken);
+const client = twilio(process.env.ACCOUNTSID, process.env.AUTHTOKEN);
 
 
 router.post('/sms', async (req,res)=>{
@@ -17,10 +15,10 @@ router.post('/sms', async (req,res)=>{
   console.log("Entered the messaging sectiom ");
   console.log(req.body);
 
-  let location = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY`).then(res => res.results[0].formatted_address)
+  // let location = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${process.env.GOOGLE_MAPS_API_KEY}`).then(res => console.log(res.data)).catch(err => console.log(err))
 
   client.messages.create({
-  body: `Hello Im in danger, please help, my current location is ${location}`,
+  body: `Hello Im in danger, please help, my current location is ${"xyz"}`,
   to: '+917021746420', // Text this number
   from: '+15855952432', // From a valid Twilio number
 })
@@ -31,13 +29,12 @@ res.send("The numbers recieved are +917021746420");
 })
 
 router.get('/call',(req,res)=>{
-client.calls
-    .create({
+  client.calls.create({
       twiml: '<Response><Say>EMERGENCY! THE USER XYZ IS IN DANGER! THE USER XYZ IS IN DANGER! FROM SAFESTRIDE</Say></Response>',
        to: '+917021746420',
        from: '+15855952432'
-     })
-    .then(call => console.log(call.sid)).catch(error => {console.log(error);request.send(error);});
+  })
+  .then(call => console.log(call.sid)).catch(error => {console.log(error);request.send(error);});
   res.send("Trying to get numbers");
 })
 

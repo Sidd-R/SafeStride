@@ -11,7 +11,7 @@ LogBox.ignoreLogs([
 
 
 
-const NEARBY_SEARCH_RADIUS = 200; // Search radius in meters
+const NEARBY_SEARCH_RADIUS = 500; // Search radius in meters
 
 export default function NearestSafeSpot({ navigation }) {
   const [hospitals, setHospitals] = useState([]);
@@ -32,10 +32,10 @@ export default function NearestSafeSpot({ navigation }) {
     // location=19.4065, 72.8338
     const response = await axios.get(
       `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${NEARBY_SEARCH_RADIUS}&type=hospital&key=${GOOGLE_MAPS_API_KEY}`
-    );
-
+    ).then(data => data.data);
+    
     const results =  []
-    response.data.results.forEach((result) => {
+    response.results.forEach((result) => {
       results.push({
         name: result.name,
         address: result.vicinity,
@@ -51,10 +51,7 @@ export default function NearestSafeSpot({ navigation }) {
     getSafeSpots()
   }, []);
 
-
-
   return (
-
     <View style={styles.container}>
       <Text style={styles.heading}>Find Nearby SafeSpots</Text>
       <ScrollView className="w-10/12  ">
