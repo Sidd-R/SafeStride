@@ -73,6 +73,17 @@ const SafestRoute = ({navigation}) => {
     longitudeDelta: 0.0421,
   })
   let n=0
+
+  const updateArea = () => {
+    const newRegion ={
+      latitude: source.latitude,
+      longitude: source.longitude,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    }
+    setRegion(newRegion);
+    mapRef.current.animateToRegion(region, 1000);
+  }
   
   async function changeMap() {
     setSelectedRoute(0)
@@ -88,19 +99,11 @@ const SafestRoute = ({navigation}) => {
       const sourceLocation = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${sourceAddress}&key=${GOOGLE_MAPS_API_KEY}`).then(data => data.data.results[0].geometry.location)
       console.log(sourceLocation);
       setSource({latitude: sourceLocation.lat, longitude: sourceLocation.lng});
-      
-      const newRegion ={
-        latitude: source.latitude,
-        longitude: source.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }
-  
-      mapRef.current.animateToRegion(newRegion, 1000);
-      setRegion(newRegion);
 
       const destinationLocation = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${destAddress}&key=${GOOGLE_MAPS_API_KEY}`).then(data => data.data.results[0].geometry.location)
       setDestination({latitude: destinationLocation.lat, longitude: destinationLocation.lng});
+
+      updateArea()
     } catch (error) {
       console.log(error,'2')
       alert('Location not found')
@@ -172,8 +175,8 @@ const SafestRoute = ({navigation}) => {
           if (riskScores.length == 3) setButtons(['route1','route2','route3'])
           else if (riskScores.length == 2) setButtons(['route1','route2'])
           else setButtons(['route1'])
-
-          if (riskScores[0] > 5) {
+          console.log('fff',riskScores[0]);
+          if (riskScores[0] > 0.65) {
             Alert.alert(
               'Warning',
               'The riskscore of the availaible routes is beyond the safety index, It is suggested that you go to a safe spot.',
@@ -281,7 +284,7 @@ const SafestRoute = ({navigation}) => {
           {
               answer.map((i,j)=>{
                   return(
-                      <Text style={{color:"grey", fontWeight: 'bold'}} key={j}>Route {j}:  {i}</Text>
+                      <Text style={{color:"grey", fontWeight: 'bold'}} key={j}>Route {j}:  {Math.round(i*100)}%</Text>
                   )
               })
           }
