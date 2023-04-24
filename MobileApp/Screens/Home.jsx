@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image,ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Home({ navigation }) {
@@ -58,8 +58,34 @@ export default function Home({ navigation }) {
         </View>
         </LinearGradient>
       </View>
-      <View>
+      <View >
         <Text style={styles.exploreNearby}>Explore Nearby</Text>
+      </View>
+      <View style={styles.exploreSection}>
+      <TouchableOpacity style={styles.nearbyButtons}>
+          
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.nearbyButtons}>
+          
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.nearbyButtons}>
+          
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.nearbyButtons}>
+          
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.nearbyButtons}>
+          
+      </TouchableOpacity>
+      
+      </View>
+      <View >
+        <Text style={styles.exploreNearby}>Past History</Text>
+      </View>
+      <View>
+      <TouchableOpacity style={styles.pastHistory}>
+        
+        </TouchableOpacity>
       </View>
       </View>
     </View>
@@ -74,12 +100,32 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingTop: 10
   },
+  nearbyButtons: {
+    width: 50,
+    height: 50,
+    backgroundColor: "#ECECEC",
+    borderRadius: 10,
+    margin: 8,
+    marginTop: 15,
+  },
+  pastHistory: {
+    width: "90%",
+    height: 150,
+    backgroundColor: "#ECECEC",
+    borderRadius: 10,
+    margin: 20,
+    marginTop: 15,
+  },
   exploreNearby: {
     marginLeft: 25,
-    fontSize: 25,
+    fontSize: 23,
     fontWeight: 'bold',
     color: 'grey',
-    marginTop: -5,
+    marginTop: 5,
+  },
+  exploreSection:{
+    flexDirection: 'row',
+    marginLeft: 15,
   },
   topText:{
     marginBottom: 10,
@@ -91,6 +137,7 @@ const styles = StyleSheet.create({
   },
   topTextLine2:{
     fontSize: 20,
+    color: 'red',
   },
   card: {
     width: 350,
