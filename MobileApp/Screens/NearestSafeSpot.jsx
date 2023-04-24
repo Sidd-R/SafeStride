@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, ScrollView, Image } from 'react-native';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import { LogBox } from 'react-native';
-import {GOOGLE_MAPS_API_KEY} from '@env'
+//import {GOOGLE_MAPS_API_KEY} from '@env'
+const GOOGLE_MAPS_API_KEY='AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -53,7 +54,14 @@ export default function NearestSafeSpot({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Find Nearby SafeSpots</Text>
+      <Image source={require('../assets/findingNearbySafeSpots.png')}
+                style={{
+                  marginLeft: -40,
+                  marginTop:10,
+                  height: 70,
+                  width: 400,
+                }}
+                />
       <ScrollView className="w-10/12  ">
       {
         hospitals.map((result,i) => {
@@ -78,7 +86,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 10,
+    //paddingTop: 10,
   },
   heading: {
     fontSize: 20,
@@ -96,10 +104,10 @@ const styles = StyleSheet.create({
   card: {
     // width: '100%',
     marginTop: 5,
-    marginLeft: 5,
-    marginRight: 5,
+    marginLeft: 1,
+    marginRight: 1,
     marginBottom: 10,
-    borderColor: 'lightblue',
+    borderColor: '#FF4F63',
     borderWidth: 1,
     borderRadius: 7,
     justifyContent: 'flex-start',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image,ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Home({ navigation }) {
@@ -14,11 +14,13 @@ export default function Home({ navigation }) {
       <LinearGradient colors={['#F6A684','#F61956']} start={{x: 0.1, y: 0.2} } style={styles.card}>
         <TouchableOpacity onPress={() => navigation.navigate('Safest Route')}>
          
-          <Text style={styles.cardTitle}>Safest Route</Text>
           <Image source={require('../assets/SafestRoute.png')}
                 style={{
-                  marginLeft: -80,
-                  marginTop: -130,
+                  marginLeft: -50,
+                  marginTop: 0,
+                 
+                  height: 100,
+                  width: 400,
                 }}
                 />
         </TouchableOpacity>
@@ -27,11 +29,13 @@ export default function Home({ navigation }) {
       <View >
       <LinearGradient colors={['#F6A684','#F61956']} start={{x: 0.2, y: 0.2} } style={styles.card}>
         <TouchableOpacity onPress={() => navigation.navigate('nsf',{navigation})} >
-          <Text style={styles.cardTitle}>Nearest Safe Spot</Text>
-          <Image source={require('../assets/nearbySafespot.png')}
+          
+          <Image source={require('../assets/NearbySafeSpots.png')}
                 style={{
-                  marginLeft: -80,
-                  marginTop: -130,
+                  marginLeft: -50,
+                  marginTop: 0,
+                  height: 100,
+                  width: 400,
                 }}
                 />
         </TouchableOpacity>
@@ -43,8 +47,10 @@ export default function Home({ navigation }) {
        <TouchableOpacity onPress={() => navigation.navigate('SOS')}>
         <Image source={require('../assets/SOS.png')}
                 style={{
-                  marginLeft: -70,
-                  marginTop:-80,
+                  marginLeft: -50,
+                  marginTop: 0,
+                  height: 100,
+                  width: 400,
                 }}
                 />
           <Text style={styles.cardTitle}>S O S</Text>
@@ -52,11 +58,36 @@ export default function Home({ navigation }) {
         </View>
         </LinearGradient>
       </View>
-      <View>
+      <View >
         <Text style={styles.exploreNearby}>Explore Nearby</Text>
       </View>
+      <View style={styles.exploreSection}>
+      <TouchableOpacity style={styles.nearbyButtons}>
+          
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.nearbyButtons}>
+          
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.nearbyButtons}>
+          
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.nearbyButtons}>
+          
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.nearbyButtons}>
+          
+      </TouchableOpacity>
+      
       </View>
-
+      <View >
+        <Text style={styles.exploreNearby}>Past History</Text>
+      </View>
+      <View>
+      <TouchableOpacity style={styles.pastHistory}>
+        
+        </TouchableOpacity>
+      </View>
+      </View>
     </View>
   );
 }
@@ -69,12 +100,32 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingTop: 10
   },
+  nearbyButtons: {
+    width: 50,
+    height: 50,
+    backgroundColor: "#ECECEC",
+    borderRadius: 10,
+    margin: 8,
+    marginTop: 15,
+  },
+  pastHistory: {
+    width: "90%",
+    height: 150,
+    backgroundColor: "#ECECEC",
+    borderRadius: 10,
+    margin: 20,
+    marginTop: 15,
+  },
   exploreNearby: {
     marginLeft: 25,
-    fontSize: 25,
+    fontSize: 23,
     fontWeight: 'bold',
     color: 'grey',
-    marginTop: -5,
+    marginTop: 5,
+  },
+  exploreSection:{
+    flexDirection: 'row',
+    marginLeft: 15,
   },
   topText:{
     marginBottom: 10,
@@ -86,12 +137,13 @@ const styles = StyleSheet.create({
   },
   topTextLine2:{
     fontSize: 20,
+    color: 'red',
   },
   card: {
     width: 350,
-    height: 140,
+    height: 100,
     marginTop: 0,
-    margin: 20,
+    margin: 15,
     // marginBottom: 20,
     //borderColor: 'lightgrey',
     borderRadius: 20,

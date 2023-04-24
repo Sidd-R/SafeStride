@@ -3,6 +3,11 @@
 
 // Import React
 import React from 'react';
+import {
+  useFonts,
+  Poppins,
+} from '@expo-google-fonts/inter';
+
 
 // Import Navigators from React Navigation
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -33,7 +38,7 @@ const HomeStack = ({navigation}) => {
             <NavigationDrawerHeader navigationProps={navigation} />
           ),
           headerStyle: {
-            backgroundColor: '#106ffe', //Set Header color
+            backgroundColor: '#FF4F63', //Set Header color
           },
           headerTintColor: '#fff', //Set Header text color
           headerTitleStyle: {
@@ -54,11 +59,13 @@ const SOSScreenStack = ({navigation}) => {
           <NavigationDrawerHeader navigationProps={navigation} />
         ),
         headerStyle: {
-          backgroundColor: '#106ffe', //Set Header color
+          backgroundColor: '#FF4F63', //Set Header color
+        
         },
         headerTintColor: '#fff', //Set Header text color
         headerTitleStyle: {
           fontWeight: 'bold', //Set Header text style
+          fontFamily: 'Poppins',
         },
       }}>
       <Stack.Screen
@@ -81,7 +88,7 @@ const NFSScreenStack = ({navigation}) => {
           <NavigationDrawerHeader navigationProps={navigation} />
         ),
         headerStyle: {
-          backgroundColor: '#106ffe', //Set Header color
+          backgroundColor: '#FF4F63', //Set Header color
         },
         headerTintColor: '#fff', //Set Header text color
         headerTitleStyle: {
@@ -115,11 +122,12 @@ const SSScreenStack = ({navigation}) => {
           <NavigationDrawerHeader navigationProps={navigation} />
         ),
         headerStyle: {
-          backgroundColor: '#106ffe', //Set Header color
+          backgroundColor: '#FF4F63', //Set Header color
+          
         },
         headerTintColor: '#fff', //Set Header text color
         headerTitleStyle: {
-          fontWeight: 'bold', //Set Header text style
+          //fontWeight: 'semi-bold', //Set Header text style
         },
       }}>
       <Stack.Screen
