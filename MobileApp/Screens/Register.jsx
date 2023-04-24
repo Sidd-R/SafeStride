@@ -39,6 +39,8 @@ const Register = (props) => {
   const [userPassword, setUserPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
+  const [phone1,setPhone1]=useState('');
+  const [phone2,setPhone2]=useState('');
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
 
   const emailInputRef = createRef();
@@ -74,8 +76,9 @@ const Register = (props) => {
       name: userName,
       email: userEmail,
       age: userAge,
-      address: userAddress,
+      phone1: phone1,
       password: userPassword,
+      phone2: phone2,
     };
 
     const userId = doc(db,'users',userEmail)
@@ -213,11 +216,25 @@ const Register = (props) => {
           <View style={styles.SectionStyle}>
             <TextInput
               style={styles.inputStyle}
-              onChangeText={(UserAddress) =>
-                setUserAddress(UserAddress)
+              onChangeText={(phone) =>
+                setPhone1(phone)
               }
               underlineColorAndroid="#f000"
-              placeholder="Enter Address"
+              placeholder="Enter Emergency Contact 1"
+              placeholderTextColor="#8b9cb5"
+              autoCapitalize="sentences"
+              ref={addressInputRef}
+              returnKeyType="next"
+              onSubmitEditing={Keyboard.dismiss}
+              blurOnSubmit={false}
+            />
+             <TextInput
+              style={styles.inputStyle}
+              onChangeText={(phone) =>
+                setPhone2(phone)
+              }
+              underlineColorAndroid="#f000"
+              placeholder="Enter Emergency Contact 2"
               placeholderTextColor="#8b9cb5"
               autoCapitalize="sentences"
               ref={addressInputRef}

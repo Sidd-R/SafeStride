@@ -1,8 +1,9 @@
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Dimensions, Text, TextInput, Button, TouchableOpacity, ToggleSButton, Alert } from 'react-native';
+import { StyleSheet,Image, View, Dimensions, Text, TextInput, Button, TouchableOpacity, ToggleSButton, Alert } from 'react-native';
 //import {GOOGLE_MAPS_API_KEY} from '@env'
 import axios from 'axios';
+import { LinearGradient } from 'expo-linear-gradient';
 import Constants from "expo-constants";
 import { ButtonGroup } from '@rneui/themed'
 import Loader from '../components/Loader';
@@ -185,7 +186,15 @@ const SafestRoute = () => {
       <View style={styles.inputsec} >
         <TextInput style={styles.input} placeholder='Source' onChangeText={setSourceAddress}  />
         <TextInput style={styles.input} placeholder='destination' onChangeText={setDestAddress} />
-        <TouchableOpacity style={styles.button} onPress={changeMap}>
+        <Image source={require('../assets/SafestRouteIcons.png')}
+                style={{
+                  marginLeft: -55,
+                  marginTop: -95,
+                  height: 100,
+                  width: 170,
+                }}
+                />
+        <TouchableOpacity  onPress={changeMap} style={styles.button}>
           <Text style={styles.buttonText} >Go</Text>
         </TouchableOpacity>
       </View>
@@ -198,9 +207,9 @@ const SafestRoute = () => {
           setSelectedRoute(value);
         }}
         selectedTextStyle={{color:"white"}}
-        textStyle={{color:"#106ffe"}}
+        textStyle={{color:"#FF4F63"}}
         buttonStyle={{backgroundColor:"white"}}
-        selectedButtonStyle={{backgroundColor:"#106ffe"}}
+        selectedButtonStyle={{backgroundColor:"#FF4F63"}}
         containerStyle={{ marginBottom: 40,marginTop:0, width:"80%",marginLeft:"10%",borderRadius:5,backgroundColor:'white'}}
       />
       </View>:null}
@@ -240,12 +249,12 @@ const SafestRoute = () => {
       </MapView>
      
      {dispMap? <View style={{marginBottom: 20, marginLeft: 20, padding:10}}>
-          <Text style={{color:"blue", fontSize: 20}}>The Routes with their riskscores are</Text>
+          <Text style={{color:"#FF4F63", fontSize: 20}}>The Routes with their riskscores are</Text>
           {
               
               answer.map((i,j)=>{
                   return(
-                      <Text style={{color:"cadetblue", fontWeight: 'bold'}} key={j}>Route {j}:  {i}</Text>
+                      <Text style={{color:"grey", fontWeight: 'bold'}} key={j}>Route {j}:  {i}</Text>
                   )
               })
           }
@@ -258,6 +267,7 @@ const SafestRoute = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+   
   },
   map: {
      
@@ -268,26 +278,26 @@ const styles = StyleSheet.create({
   },
   button: {
     color: '#106ffe',
-    backgroundColor: '#106ffe',
-    borderRadius: 5,
+    backgroundColor: '#FF4F63',
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
-    marginLeft: "10%",
-    padding: 12,
+    marginTop: 10,
+    marginLeft: "5%",
+    padding: 7,
     marginBottom: 20,
-    width: "80%"
+    width: "90%"
   },
   input: {
     backgroundColor: 'white',
-    marginLeft: "10%",
+    marginLeft: "14%",
     // marginRight: 50,
     // marginBottom: 5,
     marginTop: 20,
-    borderRadius: 6,
+    borderRadius: 20,
     fontSize: 10,
     paddingLeft: 10,
-    height: 40,
+    height: 35,
     width:"80%",
     borderColor:"grey",
     borderWidth: 0.5

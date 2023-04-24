@@ -14,11 +14,13 @@ export default function Home({ navigation }) {
       <LinearGradient colors={['#F6A684','#F61956']} start={{x: 0.1, y: 0.2} } style={styles.card}>
         <TouchableOpacity onPress={() => navigation.navigate('Safest Route')}>
          
-          <Text style={styles.cardTitle}>Safest Route</Text>
           <Image source={require('../assets/SafestRoute.png')}
                 style={{
-                  marginLeft: -80,
-                  marginTop: -130,
+                  marginLeft: -50,
+                  marginTop: 0,
+                 
+                  height: 100,
+                  width: 400,
                 }}
                 />
         </TouchableOpacity>
@@ -27,11 +29,13 @@ export default function Home({ navigation }) {
       <View >
       <LinearGradient colors={['#F6A684','#F61956']} start={{x: 0.2, y: 0.2} } style={styles.card}>
         <TouchableOpacity onPress={() => navigation.navigate('nsf',{navigation})} >
-          <Text style={styles.cardTitle}>Nearest Safe Spot</Text>
-          <Image source={require('../assets/nearbySafespot.png')}
+          
+          <Image source={require('../assets/NearbySafeSpots.png')}
                 style={{
-                  marginLeft: -80,
-                  marginTop: -130,
+                  marginLeft: -50,
+                  marginTop: 0,
+                  height: 100,
+                  width: 400,
                 }}
                 />
         </TouchableOpacity>
@@ -43,8 +47,10 @@ export default function Home({ navigation }) {
        <TouchableOpacity onPress={() => navigation.navigate('SOS')}>
         <Image source={require('../assets/SOS.png')}
                 style={{
-                  marginLeft: -70,
-                  marginTop:-80,
+                  marginLeft: -50,
+                  marginTop: 0,
+                  height: 100,
+                  width: 400,
                 }}
                 />
           <Text style={styles.cardTitle}>S O S</Text>
@@ -56,7 +62,6 @@ export default function Home({ navigation }) {
         <Text style={styles.exploreNearby}>Explore Nearby</Text>
       </View>
       </View>
-
     </View>
   );
 }
@@ -89,9 +94,9 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 350,
-    height: 140,
+    height: 100,
     marginTop: 0,
-    margin: 20,
+    margin: 15,
     // marginBottom: 20,
     //borderColor: 'lightgrey',
     borderRadius: 20,
