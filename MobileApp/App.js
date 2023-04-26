@@ -1,88 +1,15 @@
-// import { StyleSheet, Text, View } from 'react-native';
-// import { NavigationContainer} from '@react-navigation/native';
-// import { createDrawerNavigator } from '@react-navigation/drawer';
-// import { createTheme, ThemeProvider} from'@rneui/themed'
-// import Home from './Screens/Home';
-// import NearestSafeSpot from './Screens/NearestSafeSpot';
-// import Sos from './Screens/Sos';
-// import Login from './Screens/Login';
-// import DirectSpot from './Screens/DirectSpot';
-// import SafestRoute from './Screens/SafestRoute';
-// import Register from './Screens/Register';
-
-// // Navigation
-// const Drawer = createDrawerNavigator();
-
-// export default function App() {
-//   const theme = createTheme({
-//     lightColors: {
-//       primary: 'rgb(32, 136, 192)',
-//     },
-//     darkColors: {
-//       primary: 'black',
-//     },
-//     mode: 'light',
-//   });
-
-//   return (
-//     <ThemeProvider theme={theme}>
-//       <NavigationContainer>
-//         <Drawer.Navigator initialRouteName="Home">
-//           {/* <Drawer.Screen name="Home" component={MainStackNavigator} /> */}
-//           <Drawer.Screen name="Home" component={Home} 
-//           options={{
-//             title:"Home",
-//             headerStyle:{
-//               backgroundColor: 'cadetblue',
-//               height:90,  
-//             },
-//             headerStatusBarHeight:25,
-//             headerTintColor:'black'
-//           }}/>
-//           <Drawer.Screen name="Nearest Safe Spot" component={NearestSafeSpot} />
-//           <Drawer.Screen name="Safest Route" component={SafestRoute} />
-//           <Drawer.Screen name="S.O.S" component={Sos} />
-//           <Drawer.Screen name="Login" component={Login} options={{headerShown:false,}}/>
-//           <Drawer.Screen name="DirectSpot" component={DirectSpot} />
-//           <Drawer.Screen name="Register" component={Register} options={{headerShown:false,}}/>
-//         </Drawer.Navigator>
-//       </NavigationContainer>
-//     </ThemeProvider>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     padding: 20,
-//   },
-//   heading: {
-//     fontSize: 20,
-//     fontWeight: 'bold',
-//     marginBottom: 10,
-//   },
-// });
-
-
-// // Example of Splash, Login and Sign Up in React Native
-// // https://aboutreact.com/react-native-login-and-signup/
-// import 'react-native-gesture-handler';
-
-// Import React and Component
-import React from 'react';
-import { Text } from 'react-native';
-// Import Navigators from React Navigation
+import React, { useEffect,useState } from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { getDoc,doc, } from 'firebase/firestore';
+
 
 // Import Screens
 import SplashScreen from './Screens/SplashScreen';
 import Login from './Screens/Login';
 import Register from './Screens/Register';
 import DrawerNavigationRoutes from './Screens/DrawerNavigationRoutes';
+import { db } from './dbconfig';
 
 const Stack = createNativeStackNavigator();
 
@@ -105,6 +32,16 @@ const Auth = () => {
 };
 
 const App = () => {
+  const [uri, setUri] = useState(null)
+  const getUri = async () => {
+    const userId = doc(db,'backend','uri')
+    const user = await getDoc(userId)
+    const {uri} = user.data();
+    setUri(uri)
+  }
+  useEffect(() => {    
+    getUri()
+  }, [])
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SplashScreen">
@@ -126,6 +63,8 @@ const App = () => {
           name="DrawerNavigationRoutes"
           component={DrawerNavigationRoutes}
           // Hiding header for Navigation Drawer
+          initialParams={{uri:uri}}
+          
           options={{headerShown: false}}
         />
       </Stack.Navigator>

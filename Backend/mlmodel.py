@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # df1=pd.read_csv('location.csv')
+# print('Entered mlmodel')
 df2=pd.read_csv('sh.csv')
 X = df2.iloc[:, :-1].values
 y = df2.iloc[:, -1].values
@@ -43,7 +44,8 @@ x3=int(sys.argv[4]) #metro
 x4=int(sys.argv[3]) #police
 x5=20000
 
-
+# x1,x2,x3,x4,x5 = 19.123111,72.8695881,1,4,20000
+# t, et = 12,13
 X1=[[x2,x1,x5,x4,x3,t,et]]
 
 y_pred=regressor.predict(X1)

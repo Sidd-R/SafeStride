@@ -52,7 +52,7 @@ const decodePolyline = (encoded) => {
   return poly;
 };  
 
-const SafestRoute = ({navigation}) => {
+const SafestRoute = ({navigation,route}) => {
   const mapRef = useRef(null)
 
   const [selectedRoute, setSelectedRoute] = useState(0)
@@ -150,65 +150,66 @@ const SafestRoute = ({navigation}) => {
         setLoading(false);
       }
 
-        try {
-          // const { manifest } = Constants;
-          // const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
-          // const uri = 'https://99a5-2409-40c0-6c-4c4f-cd4c-7ec9-5e46-d88e.ngrok-free.app'
-          const riskScores = await axios.post(uri+'/safestroute', {
-            waypoints: waypoints,
-            numberOfRoutes: n + 1,
-            destlatitude: destination.latitude,
-            destlongitude: destination.longitude,
-            sourcelatitude: source.latitude,
-            sourcelongitude: source.longitude,
-          }).then(data => data.data.riskscores);
+      try {
+        // const { manifest } = Constants;
+        // const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
+        // const uri = 'https://99a5-2409-40c0-6c-4c4f-cd4c-7ec9-5e46-d88e.ngrok-free.app'
+        const {uri} = route.params
+        const riskScores = await axios.post(uri+'/safestroute', {
+          waypoints: waypoints,
+          numberOfRoutes: n + 1,
+          destlatitude: destination.latitude,
+          destlongitude: destination.longitude,
+          sourcelatitude: source.latitude,
+          sourcelongitude: source.longitude,
+        }).then(data => data.data.riskscores);
 
-          riskScores.forEach((e,i)=> {
-              e = String(e);
-              e = e.substring(7)
-              riskScores[i]="0."+e;
-              riskScores[i] = Number(riskScores[i])
-          })
+        riskScores.forEach((e,i)=> {
+            e = String(e);
+            e = e.substring(7)
+            riskScores[i]="0."+e;
+            riskScores[i] = Number(riskScores[i])
+        })
 
-          riskScores.sort()
+        riskScores.sort()
 
-          if (riskScores.length == 3) setButtons(['route1','route2','route3'])
-          else if (riskScores.length == 2) setButtons(['route1','route2'])
-          else setButtons(['route1'])
-          console.log('fff',riskScores[0]);
-          if (riskScores[0] > 0.65) {
-            Alert.alert(
-              'Warning',
-              'The riskscore of the availaible routes is beyond the safety index, It is suggested that you go to a safe spot.',
-              [
-                {
-                  text: 'Cancel',
-                  onPress: () => {
-                    return null;
-                  },
+        if (riskScores.length == 3) setButtons(['route1','route2','route3'])
+        else if (riskScores.length == 2) setButtons(['route1','route2'])
+        else setButtons(['route1'])
+        console.log('fff',riskScores[0]);
+        if (riskScores[0] > 0.65) {
+          Alert.alert(
+            'Warning',
+            'The riskscore of the availaible routes is beyond the safety index, It is suggested that you go to a safe spot.',
+            [
+              {
+                text: 'Cancel',
+                onPress: () => {
+                  return null;
                 },
-                {
-                  text: 'Proceed',
-                  onPress: () => {
-                    navigation.navigate('nsf');
-                  },
+              },
+              {
+                text: 'Proceed',
+                onPress: () => {
+                  navigation.navigate('nsf');
                 },
-              ],
-              {cancelable: false},
-            );
-          }
-       
+              },
+            ],
+            {cancelable: false},
+          );
+        }
+      
 
-          console.log(buttons);
-          console.log(riskScores.length);
-          console.log(riskScores);
-          setAnswer(riskScores);
-          setDispMap(true);
-        }
-        catch (error) {
-          console.error(error);
-        }
-     setLoading(false);
+        console.log(buttons);
+        console.log(riskScores.length);
+        console.log(riskScores);
+        setAnswer(riskScores);
+        setDispMap(true);
+    }
+    catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
   }
 
   return (

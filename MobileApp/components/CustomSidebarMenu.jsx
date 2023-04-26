@@ -1,40 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import {View, Text, Alert, StyleSheet} from 'react-native';
-
 import {
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
-
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+export default function CustomSidebarMenu(props)  {
+  const [name, setName] = useState('User')
 
-
-const CustomSidebarMenu = (props) => {
-  const [email, setEmail] = useState('User')
-
-  const getEmail = async () => {
-    const userEmail = await AsyncStorage.getItem('user_id').then((value) => value);
-    // console.log(email,typeof(email));
-    setEmail(userEmail);
+  const getName = async () => {
+    const userName = await AsyncStorage.getItem('name').then((value) => value);
+    setName(userName);
   }
 
   useEffect(() => {
-    getEmail()
+    getName()
   }, [])
-  
   
   return (
     <View style={stylesSidebar.sideMenuContainer}>
       <View style={stylesSidebar.profileHeader}>
         <View style={stylesSidebar.profileHeaderPicCircle}>
-          <Text style={{fontSize: 25, color: '#106ffe'}}>
-            {email.charAt(0)}
+          <Text style={{fontSize: 25, color: '#e63950'}}>
+            {name.charAt(0)}
           </Text>
         </View>
         <Text style={stylesSidebar.profileHeaderText}>
-          {email}
+          Hey, {name}
         </Text>
       </View>
       <View style={stylesSidebar.profileHeaderLine} />
@@ -76,8 +70,6 @@ const CustomSidebarMenu = (props) => {
    
   );
 };
-
-export default CustomSidebarMenu;
 
 const stylesSidebar = StyleSheet.create({
   sideMenuContainer: {

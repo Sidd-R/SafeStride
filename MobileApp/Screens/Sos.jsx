@@ -6,10 +6,13 @@ import * as Location from 'expo-location';
 import NearestSafeSpot from './NearestSafeSpot';
 import axios from 'axios'
 import Constants from "expo-constants";
-import { uri } from '../uri';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { uri } from '../uri';
 
 
-export default function Sos ({navigation}) {
+export default function Sos ({navigation,route}) {
+
+  console.log(route.params.uri,'sos');
   
   const sendSOS = async () => {
     try {
@@ -19,6 +22,7 @@ export default function Sos ({navigation}) {
 
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
+        setSosSent(false)
         console.log('Permission to access location was denied');
         return;
       }
@@ -26,12 +30,12 @@ export default function Sos ({navigation}) {
       let location = await Location.getCurrentPositionAsync({});
       let { latitude, longitude } = location.coords;
 
-      var details = {
-        'Body': 'msg from frntd',
-        'To': '+917021746420',
-        'From': '+15855952432',
+      // var details = {
+      //   'Body': 'msg from frntd',
+      //   'To': '+917021746420',
+      //   'From': '+15855952432',
 
-      }
+      // }
 
       // var formBody = [];
       // for (var property in details) {
@@ -50,13 +54,16 @@ export default function Sos ({navigation}) {
       // const { manifest } = Constants;
       // const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
       // const uri = 'https://99a5-2409-40c0-6c-4c4f-cd4c-7ec9-5e46-d88e.ngrok-free.app'
+      const phone = await AsyncStorage.getItem('phone').then((value) => value);
+      console.log(route.params.uri,'sos');
+      const {uri} = route.params
 
-      await axios.post(uri+'/sos/sms',{latitude:latitude,longitude:longitude}).then(data => console.log(data.data))
+      await axios.post(uri+'/sos/sms',{latitude:latitude,longitude:longitude,phone:phone}).then(data => console.log(data.data))
                   .catch(err => {
                     console.error(err)
                     alert('sos Failed')
                   })
-      await axios.get(uri+'/sos/call',).then(data => console.log(data.data))
+      await axios.post(uri+'/sos/call',{phone:phone}).then(data => console.log(data.data))
                 .catch(err => {
                   console.error(err)
                   alert('sos Failed')
@@ -125,7 +132,7 @@ export default function Sos ({navigation}) {
   
   return(
     <View style={styles.container}>
-      <TouchableOpacity style={[styles.sosButton,{backgroundColor:buttonbg},]} onPress={handleSosPress} disabled={sosSent}>
+      <TouchableOpacity style={[styles.sosButton,{backgroundColor:sosSent?'green':"#D12222"},]} onPress={handleSosPress} disabled={sosSent}>
         <Text style={styles.sosButtonText} >{sosRequested ? 'STOP' : sosSent?"SENT":'SOS'}</Text>
       </TouchableOpacity>
       {sosRequested && (

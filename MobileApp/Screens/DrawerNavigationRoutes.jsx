@@ -50,7 +50,7 @@ const HomeStack = ({navigation}) => {
   );
 };
 
-const SOSScreenStack = ({navigation}) => {
+const SOSScreenStack = ({navigation,route}) => {
   return (
     <Stack.Navigator
       initialRouteName="SOS"
@@ -65,12 +65,14 @@ const SOSScreenStack = ({navigation}) => {
         headerTintColor: '#fff', //Set Header text color
         headerTitleStyle: {
           fontWeight: 'bold', //Set Header text style
-          fontFamily: 'Poppins',
+          // fontFamily: 'Poppins',
         },
       }}>
       <Stack.Screen
         name="SOs"
         component={Sos}
+        initialParams={{uri:route.params.uri}}
+        // initialParams={...props}
         options={{
           title: 'Settings', //Set Header Title
         }}
@@ -113,7 +115,7 @@ const NFSScreenStack = ({navigation}) => {
   );
 };
 
-const SSScreenStack = ({navigation}) => {
+const SSScreenStack = ({navigation,route}) => {
   return (
     <Stack.Navigator
       initialRouteName="Safest Route"
@@ -133,6 +135,7 @@ const SSScreenStack = ({navigation}) => {
       <Stack.Screen
         name="Safest Route1"
         component={SafestRoute}
+        initialParams={{uri:route.params.uri}}
         options={{
           title: 'Safest Route', //Set Header Title
         }}
@@ -141,7 +144,8 @@ const SSScreenStack = ({navigation}) => {
   );
 };
 
-const DrawerNavigatorRoutes = (props) => {
+const DrawerNavigatorRoutes = ({route}) => {
+  console.log(route.params.uri,'hi');
   return (
     <Drawer.Navigator
         screenOptions={{headerShown: false}}
@@ -155,6 +159,8 @@ const DrawerNavigatorRoutes = (props) => {
         name="SOS"
         options={{drawerLabel: 'SOS',drawerLabelStyle:{color: 'white'}}}
         component={SOSScreenStack}
+        // initialParams={...props}
+        initialParams={{uri:route.params.uri}}
       />
       <Drawer.Screen 
        name='nsf' 
@@ -165,6 +171,7 @@ const DrawerNavigatorRoutes = (props) => {
         name='Safest Route'
         options={{drawerLabel: 'Safest Route',drawerLabelStyle:{color: 'white'}}}
         component={SSScreenStack}
+        initialParams={{uri:route.params.uri}}
       />
     </Drawer.Navigator>
   );

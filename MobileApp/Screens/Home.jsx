@@ -58,7 +58,7 @@ export default function Home({ navigation }) {
         </View>
         </LinearGradient>
       </View>
-      <View >
+      {/* <View >
         <Text style={styles.exploreNearby}>Explore Nearby</Text>
       </View>
       <View style={styles.exploreSection}>
@@ -86,8 +86,8 @@ export default function Home({ navigation }) {
       <TouchableOpacity style={styles.pastHistory}>
         
         </TouchableOpacity>
-      </View>
-      </View>
+      </View>*/}
+      </View> 
     </View>
   );
 }

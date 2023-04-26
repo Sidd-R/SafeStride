@@ -1,4 +1,4 @@
-import React, {useState, createRef, useEffect} from 'react';
+import React, {useState, createRef} from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -13,25 +13,11 @@ import {
   ToastAndroid,
 } from 'react-native';
 import Loader from '../components/Loader';
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDoc,doc,setDoc, } from 'firebase/firestore';
-import {DATABASE_API_KEY} from '@env'
-import {Button} from '@rneui/themed'
+import { getDoc,doc,setDoc, } from 'firebase/firestore';
 import { LinearGradient } from 'expo-linear-gradient';
-
-const firebaseConfig = {
-  apiKey: DATABASE_API_KEY,
-  authDomain: "safestride-655dd.firebaseapp.com",
-  projectId: "safestride-655dd",
-  storageBucket: "safestride-655dd.appspot.com",
-  messagingSenderId: "485999909084",
-  appId: "1:485999909084:web:8f37313fe268cf3f6b7c19"
-};
+import { db } from '../dbconfig';
 
 const Register = (props) => {
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app)
-
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [userAge, setUserAge] = useState('');
@@ -58,16 +44,20 @@ const Register = (props) => {
       alert('Please fill Email');
       return;
     }
-    if (!userAge) {
-      alert('Please fill Age');
-      return;
-    }
-    if (!userAddress) {
-      alert('Please fill Address');
-      return;
-    }
+    // if (!userAge) {
+    //   alert('Please fill Age');
+    //   return;
+    // }
+    // if (!userAddress) {
+    //   alert('Please fill Address');
+    //   return;
+    // }
     if (!userPassword) {
       alert('Please fill Password');
+      return;
+    }
+    if (!phone1) {
+      alert('Please add Atleast one emergency contact');
       return;
     }
 
@@ -78,7 +68,7 @@ const Register = (props) => {
       age: userAge,
       phone1: phone1,
       password: userPassword,
-      phone2: phone2,
+      phone2: phone2?phone2:0,
     };
 
     const userId = doc(db,'users',userEmail)
@@ -196,7 +186,7 @@ const Register = (props) => {
               blurOnSubmit={false}
             />
           </View>
-          <View style={styles.SectionStyle}>
+          {/* <View style={styles.SectionStyle}>
             <TextInput
               style={styles.inputStyle}
               onChangeText={(UserAge) => setUserAge(UserAge)}
@@ -212,7 +202,7 @@ const Register = (props) => {
               }
               blurOnSubmit={false}
             />
-          </View>
+          </View> */}
           <View style={styles.SectionStyle}>
             <TextInput
               style={styles.inputStyle}
@@ -228,13 +218,15 @@ const Register = (props) => {
               onSubmitEditing={Keyboard.dismiss}
               blurOnSubmit={false}
             />
-             <TextInput
+          </View>
+          <View style={styles.SectionStyle}>
+           <TextInput
               style={styles.inputStyle}
               onChangeText={(phone) =>
                 setPhone2(phone)
               }
               underlineColorAndroid="#f000"
-              placeholder="Enter Emergency Contact 2"
+              placeholder="Enter Emergency Contact 2 (Optional)"
               placeholderTextColor="#8b9cb5"
               autoCapitalize="sentences"
               ref={addressInputRef}

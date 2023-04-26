@@ -13,24 +13,14 @@ import {
   ToastAndroid,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDoc,doc,setDoc, } from 'firebase/firestore';
+import { getDoc,doc, } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../components/Loader';
-import {DATABASE_API_KEY} from '@env'
-
-const firebaseConfig = {
-  apiKey: DATABASE_API_KEY,
-  authDomain: "safestride-655dd.firebaseapp.com",
-  projectId: "safestride-655dd",
-  storageBucket: "safestride-655dd.appspot.com",
-  messagingSenderId: "485999909084",
-  appId: "1:485999909084:web:8f37313fe268cf3f6b7c19"
-};
+import {db} from '../dbconfig';
 
 const Login = ({navigation}) => {
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app)
+  // const app = initializeApp(dbconfig)
+  // const db = getFirestore(app)
 
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
@@ -63,7 +53,10 @@ const Login = ({navigation}) => {
     }
     ToastAndroid.show('Login Successfull',ToastAndroid.SHORT)
     setLoading(false);
-    await AsyncStorage.setItem('user_id', userEmail);
+    const {email,name,phone1} = user.data()
+    await AsyncStorage.setItem('email', email);
+    await AsyncStorage.setItem('name', name);
+    await AsyncStorage.setItem('phone', phone1);
     navigation.replace('DrawerNavigationRoutes');
   };
 

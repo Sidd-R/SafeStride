@@ -19,15 +19,14 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/SafeStrideLogo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.siddhantrao.safestride"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-   
-  
     "expo": {
       "plugins": [
         [
@@ -37,6 +36,11 @@
           }
         ]
       ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d6a59235-70e4-4498-b146-c16c26a056e5"
+      }
     }
   }
 }
