@@ -9,7 +9,15 @@
     "splash": {
       "image": "./assets/SafeStrideLogo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ffffff",
+      "plugins": [
+        [
+          "expo-location",
+          {
+            "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+          }
+        ]
+      ]
     },
     "assetBundlePatterns": [
       "**/*"
@@ -26,16 +34,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "expo": {
-      "plugins": [
-        [
-          "expo-location",
-          {
-            "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
-          }
-        ]
-      ]
     },
     "extra": {
       "eas": {
