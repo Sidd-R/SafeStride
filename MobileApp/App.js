@@ -2,7 +2,7 @@ import React, { useEffect,useState } from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { getDoc,doc, } from 'firebase/firestore';
-
+import Constants  from 'expo-constants';
 
 // Import Screens
 import SplashScreen from './Screens/SplashScreen';
@@ -33,13 +33,18 @@ const Auth = () => {
 
 const App = () => {
   const [uri, setUri] = useState(null)
-  const getUri = async () => {
-    const userId = doc(db,'backend','uri')
-    const user = await getDoc(userId)
-    const {uri} = user.data();
-    setUri(uri)
+  const getUri = /*async*/ () => {
+    // const userId = doc(db,'backend','uri')
+    // const user = await getDoc(userId)
+    // const {uri} = user.data();
+    // setUri(uri)
+    const { manifest } = Constants;
+    const temp = `http://192.168.0.218:3010`;
+    console.log(temp,"kk");
+    setUri(temp)
   }
-  useEffect(() => {    
+  useEffect(() => {  
+    console.log("whyy");  
     getUri()
   }, [])
   return (

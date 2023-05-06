@@ -12,7 +12,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Sos ({navigation,route}) {
 
-  console.log(route.params.uri,'sos');
   
   const sendSOS = async () => {
     try {
@@ -55,7 +54,6 @@ export default function Sos ({navigation,route}) {
       // const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
       // const uri = 'https://99a5-2409-40c0-6c-4c4f-cd4c-7ec9-5e46-d88e.ngrok-free.app'
       const phone = await AsyncStorage.getItem('phone').then((value) => value);
-      console.log(route.params.uri,'sos');
       const {uri} = route.params
 
       await axios.post(uri+'/sos/sms',{latitude:latitude,longitude:longitude,phone:phone}).then(data => console.log(data.data))
@@ -76,6 +74,7 @@ export default function Sos ({navigation,route}) {
       //   .then(result => console.log(result))
       //   .catch(error => console.log('error', error));
       console.log('sos sent');
+      setSosSent(true)
       ToastAndroid.show('SOS Sent Successfully',ToastAndroid.SHORT)
       
 
@@ -97,7 +96,7 @@ export default function Sos ({navigation,route}) {
         setSosRequested(false);
         setSecondsLeft(0);
         sendSOS()
-        // setSosSent(true)
+        setSosSent(true)
         setButtonbg('green')
       }, 5000);
     }

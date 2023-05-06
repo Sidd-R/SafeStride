@@ -12,7 +12,6 @@ router.post('/sms', async (req,res)=>{
   long=req.body.longitude;
   phone=req.body.phone;
 
-  console.log("Entered the messaging sectiom ");
   console.log(req.body);
 
   // let location = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${process.env.GOOGLE_MAPS_API_KEY}`).then(res => console.log(res.data)).catch(err => console.log(err))
@@ -25,6 +24,7 @@ router.post('/sms', async (req,res)=>{
   // .then((message) => console.log(message.sid));
   // // res.send("okk");
   // res.send("The numbers recieved are +917021746420");
+  res.send("testing")
 
 })
 

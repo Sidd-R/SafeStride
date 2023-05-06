@@ -1,56 +1,15 @@
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet,Image, View, Dimensions, Text, TextInput, Button, TouchableOpacity, ToggleSButton, Alert } from 'react-native';
-//import {GOOGLE_MAPS_API_KEY} from '@env'
+import { StyleSheet,Image, View, Dimensions, Text, TextInput, Button, TouchableOpacity, ToggleSButton, Alert, Linking } from 'react-native';
+import {GOOGLE_MAPS_API_KEY} from '@env'
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from "expo-constants";
 import { ButtonGroup } from '@rneui/themed'
 import Loader from '../components/Loader';
-const GOOGLE_MAPS_API_KEY='AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
+// const GOOGLE_MAPS_API_KEY='AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
 import { uri } from '../uri';
-
-const decodePolyline = (encoded) => {
-  const poly = [];
-  let index = 0;
-  const len = encoded.length;
-  let lat = 0;
-  let lng = 0;
-
-  while (index < len) {
-    let b;
-    let shift = 0;
-    let result = 0;
-
-    do {
-      b = encoded.charAt(index++).charCodeAt(0) - 63;
-      result |= (b & 0x1f) << shift;
-      shift += 5;
-    } while (b >= 0x20);
-
-    const dLat = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
-    lat += dLat;
-
-    shift = 0;
-    result = 0;
-
-    do {
-      b = encoded.charAt(index++).charCodeAt(0) - 63;
-      result |= (b & 0x1f) << shift;
-      shift += 5;
-    } while (b >= 0x20);
-
-    const dLng = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
-    lng += dLng;
-
-    poly.push({
-      latitude: lat / 1e5,
-      longitude: lng / 1e5,
-    });
-  }
-
-  return poly;
-};  
+import polyline from 'polyline';
 
 const SafestRoute = ({navigation,route}) => {
   const mapRef = useRef(null)
@@ -73,6 +32,7 @@ const SafestRoute = ({navigation,route}) => {
     longitudeDelta: 0.0421,
   })
   let n=0
+  let gmapRoutes = ["", "", ""]
 
   const updateArea = () => {
     const newRegion ={
@@ -85,20 +45,30 @@ const SafestRoute = ({navigation,route}) => {
     mapRef.current.animateToRegion(region, 1000);
   }
   
+  const openGoogleMaps = (/*startLatitude, startLongitude, endLatitude, endLongitude, waypoints*/e) => {
+    //37.7965,-122.4056|37.7998,-122.4057
+    const url = `https://www.google.com/maps/dir/?api=1&origin=${source.latitude},${source.longitude}&destination=${destination.latitude},${destination.longitude}&waypoints=${e}`;
+    Linking.openURL(url);
+  }
+  
+  
+
   async function changeMap() {
     setSelectedRoute(0)
     setDispMap(false)
     setAnswer([])
     setWaypoints([])
     n = 0
+    gmapRoutes = ["","",""]
     console.log("sourceAddress ",sourceAddress);
     console.log("destinationAddress",destAddress);
     setLoading(true)
     try {
-      console.log('hi');
       const sourceLocation = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${sourceAddress}&key=${GOOGLE_MAPS_API_KEY}`).then(data => data.data.results[0].geometry.location)
       console.log(sourceLocation);
       setSource({latitude: sourceLocation.lat, longitude: sourceLocation.lng});
+      updateArea()
+
 
       const destinationLocation = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${destAddress}&key=${GOOGLE_MAPS_API_KEY}`).then(data => data.data.results[0].geometry.location)
       setDestination({latitude: destinationLocation.lat, longitude: destinationLocation.lng});
@@ -114,41 +84,53 @@ const SafestRoute = ({navigation,route}) => {
     try {
       console.log("the source and destination are: ", source, " and ", destination)
       let routes = await axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${sourceAddress}&destination=${destAddress}&key=${GOOGLE_MAPS_API_KEY}&alternatives=true`).then(data => data.data.routes);
-  
-        routes.forEach((route, routeIndex) => {
-           n= routeIndex;
-          routeOverViews[routeIndex] = (decodePolyline(route.overview_polyline.points))
-          route.legs.forEach((leg) => {
-            leg.steps.forEach((step) => {
-  
-              if (step.steps) {
-  
-                step.steps.forEach((subStep) => {
-  
-                  waypoints.push({
-                    route: routeIndex,
-                    latitude: subStep.end_location.lat,
-                    longitude: subStep.end_location.lng,
-                    duration: subStep.duration.text,
-                  });
-                });
-              } else {
-  
+      routes.forEach((route, routeIndex) => {
+        n= routeIndex;
+        let points = polyline.decode(route.overview_polyline.points)
+        points.forEach((e,i)=> {
+          if (i%10 == 0){
+            if (gmapRoutes[routeIndex] === "")
+              gmapRoutes[routeIndex] = String(e[0])+","+String(e[1])
+            else
+              gmapRoutes[routeIndex] += "|"+ String(e[0])+","+String(e[1])
+          }
+        })
+        points = points.map((point) => ({
+          latitude: point[0],
+          longitude: point[1]
+        }));
+
+        routeOverViews[routeIndex] = points
+        route.legs.forEach((leg) => {
+          leg.steps.forEach((step) => {
+
+            if (step.steps) {
+
+              step.steps.forEach((subStep) => {
+
                 waypoints.push({
-                  latitude: step.end_location.lat,
-                  longitude: step.end_location.lng,
                   route: routeIndex,
-                  duration: step.duration.text,
+                  latitude: subStep.end_location.lat,
+                  longitude: subStep.end_location.lng,
+                  duration: subStep.duration.text,
                 });
-              }
-            });
+              });
+            } else {
+              waypoints.push({
+                latitude: step.end_location.lat,
+                longitude: step.end_location.lng,
+                route: routeIndex,
+                duration: step.duration.text,
+              });
+            }
           });
         });
-        console.log(n + 1,routeOverViews.length);
-      } catch (error) {
-        console.error(error,3);
-        setLoading(false);
-      }
+      });
+      console.log(n + 1,routeOverViews.length);
+    } catch (error) {
+      console.error(error,3);
+      setLoading(false);
+    }
 
       try {
         // const { manifest } = Constants;
@@ -191,7 +173,7 @@ const SafestRoute = ({navigation,route}) => {
               {
                 text: 'Proceed',
                 onPress: () => {
-                  navigation.navigate('nsf');
+                  navigation.navigate('NSF');
                 },
               },
             ],
@@ -210,6 +192,7 @@ const SafestRoute = ({navigation,route}) => {
       console.error(error);
     }
     setLoading(false);
+    // openGoogleMaps()
   }
 
   return (
@@ -263,16 +246,19 @@ const SafestRoute = ({navigation,route}) => {
         coordinates={routeOverViews[0]}
         strokeWidth={5}
         strokeColor="cornflowerblue"
+        onPress={() => openGoogleMaps(gmapRoutes[0])}
       />:null}
       {dispMap && selectedRoute == 1 && answer.length >= 2 ? <Polyline
         coordinates={routeOverViews[1]}
         strokeWidth={5}
         strokeColor="cornflowerblue"
+        onPress={() => openGoogleMaps(gmapRoutes[1])}
       />:null}
       {dispMap && selectedRoute == 2 && answer.length >= 3 ? <Polyline
         coordinates={routeOverViews[2]}
         strokeWidth={5}
         strokeColor="cornflowerblue"
+        onPress={() => openGoogleMaps(gmapRoutes[2])}
       />:null}
       
     {source && <Marker coordinate={source} />}

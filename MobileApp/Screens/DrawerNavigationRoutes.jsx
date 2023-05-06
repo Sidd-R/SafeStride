@@ -163,7 +163,7 @@ const DrawerNavigatorRoutes = ({route}) => {
         initialParams={{uri:route.params.uri}}
       />
       <Drawer.Screen 
-       name='nsf' 
+       name='NFS' 
        options={{drawerLabel: 'Nearby SafeSpots',drawerLabelStyle:{color: 'white'}}}
        component={NFSScreenStack}
       />

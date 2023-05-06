@@ -3,8 +3,9 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity, ScrollView, Image }
 import * as Location from 'expo-location';
 import axios from 'axios';
 import { LogBox } from 'react-native';
-//import {GOOGLE_MAPS_API_KEY} from '@env'
-const GOOGLE_MAPS_API_KEY='AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
+import {GOOGLE_MAPS_API_KEY} from '@env'
+import { log } from 'react-native-reanimated';
+// const GOOGLE_MAPS_API_KEY='';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -34,7 +35,6 @@ export default function NearestSafeSpot({ navigation }) {
     const response = await axios.get(
       `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${NEARBY_SEARCH_RADIUS}&type=hospital&key=${GOOGLE_MAPS_API_KEY}`
     ).then(data => data.data);
-    
     const results =  []
     response.results.forEach((result) => {
       results.push({
@@ -65,6 +65,8 @@ export default function NearestSafeSpot({ navigation }) {
       <ScrollView className="w-10/12  ">
       {
         hospitals.map((result,i) => {
+          let name = result.name.toLowerCase()
+          if (name.includes("clinic")) return;
           return (
             <TouchableOpacity  style={styles.card} onPress={() => navigation.navigate('DirectSpot', { hosp: result})} key={i}>
               <Text style={styles.name}>{result.name}</Text>

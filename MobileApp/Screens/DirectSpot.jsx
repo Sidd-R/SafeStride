@@ -37,7 +37,8 @@ import { View , Text} from 'react-native';
 import MapView, { Polyline, Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import * as Location from 'expo-location';
-
+import {GOOGLE_MAPS_API_KEY} from '@env'
+import polyline from 'polyline';
 
 const DirectSpot = ({route}) => {
     const [location, setLocation] = useState(null);
@@ -46,7 +47,8 @@ const DirectSpot = ({route}) => {
     const [routes, setRoute] = useState(null);
     const [hospitallat, setHospitallat] = useState(route.params.hosp.latitude);
     const [hospitallong, setHospitallong] = useState(route.params.hosp.longitude);
-    const GOOGLE_MAPS_APIKEY = 'AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
+
+    // const GOOGLE_MAPS_APIKEY = 'AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
     console.log("latitude",route.params.hosp.latitude);
     console.log("longitude",route.params.hosp.longitude);
     
@@ -74,9 +76,10 @@ const DirectSpot = ({route}) => {
 
     const getDirections = async (latitude, longitude) => {
         try {
-            const resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${latitude},${longitude}&destination=${hospitallat},${hospitallong}&key=${GOOGLE_MAPS_APIKEY}`);
+            const resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${latitude},${longitude}&destination=${hospitallat},${hospitallong}&key=${GOOGLE_MAPS_API_KEY}`);
             const respJson = await resp.json();
-            const points = Polyline.decode(respJson.routes[0].overview_polyline.points);
+            const points = polyline.decode(respJson.routes[0].overview_polyline.points);
+            
             const coords = points.map(point => ({
                 latitude: point[0],
                 longitude: point[1]
@@ -84,7 +87,7 @@ const DirectSpot = ({route}) => {
             setRoute(coords);
             console.log(coords);
         } catch (error) {
-         console.log('Error:', error);
+         console.log('Error1:', error);
         }
     }
 
@@ -113,7 +116,7 @@ const DirectSpot = ({route}) => {
                         <MapViewDirections
                             origin={{ latitude: location.coords.latitude, longitude: location.coords.longitude }}
                             destination={{ latitude: hospitallat, longitude: hospitallong }}
-                            apikey={GOOGLE_MAPS_APIKEY}
+                            apikey={GOOGLE_MAPS_API_KEY}
                             strokeWidth={3}
                             strokeColor="purple"
                         />

@@ -28,7 +28,7 @@ export default function Home({ navigation }) {
       </View>
       <View >
       <LinearGradient colors={['#F6A684','#F61956']} start={{x: 0.2, y: 0.2} } style={styles.card}>
-        <TouchableOpacity onPress={() => navigation.navigate('nsf',{navigation})} >
+        <TouchableOpacity onPress={() => navigation.navigate('NFS',{navigation})} >
           
           <Image source={require('../assets/NearbySafeSpots.png')}
                 style={{
