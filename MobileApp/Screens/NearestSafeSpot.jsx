@@ -18,37 +18,37 @@ const NEARBY_SEARCH_RADIUS = 500; // Search radius in meters
 export default function NearestSafeSpot({ navigation }) {
   const [hospitals, setHospitals] = useState([]);
 
-  const getSafeSpots = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-
-    if (status !== 'granted') {
-      console.log('Permission to access location was denied');
-      return
-    }
-
-    let location = await Location.getCurrentPositionAsync({});
-    let { latitude, longitude } = location.coords;
-
-    console.log(latitude, longitude);
-
-    // location=19.4065, 72.8338
-    const response = await axios.get(
-      `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${NEARBY_SEARCH_RADIUS}&type=hospital&key=${GOOGLE_MAPS_API_KEY}`
-    ).then(data => data.data);
-    const results =  []
-    response.results.forEach((result) => {
-      results.push({
-        name: result.name,
-        address: result.vicinity,
-        latitude: result.geometry.location.lat,
-        longitude: result.geometry.location.lng,
-      })
-    });
-
-    setHospitals(results);
-  }
-
   useEffect(() => {
+    const getSafeSpots = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+  
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied');
+        return
+      }
+      console.log('mid');
+      let location = await Location.getCurrentPositionAsync({});
+      let { latitude, longitude } = location.coords;
+  
+      console.log(latitude, longitude);
+  
+      // location=19.4065, 72.8338
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${NEARBY_SEARCH_RADIUS}&type=hospital&key=${GOOGLE_MAPS_API_KEY}`
+      ).then(data => data.data);
+      const results =  []
+      response.results.forEach((result) => {
+        results.push({
+          name: result.name,
+          address: result.vicinity,
+          latitude: result.geometry.location.lat,
+          longitude: result.geometry.location.lng,
+        })
+      });
+  
+      setHospitals(results);
+      console.log('end');
+    }
     getSafeSpots()
   }, []);
 
@@ -67,6 +67,7 @@ export default function NearestSafeSpot({ navigation }) {
         hospitals.map((result,i) => {
           let name = result.name.toLowerCase()
           if (name.includes("clinic")) return;
+          if (i < 7)
           return (
             <TouchableOpacity  style={styles.card} onPress={() => navigation.navigate('DirectSpot', { hosp: result})} key={i}>
               <Text style={styles.name}>{result.name}</Text>

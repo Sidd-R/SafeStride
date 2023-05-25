@@ -64,7 +64,8 @@ const DirectSpot = ({route}) => {
             let location = await Location.getCurrentPositionAsync({});
             let { latitude, longitude } = location.coords;
             setLocation(location);
-            setRegion({ latitude, longitude, latitudeDelta: 0.05922, longitudeDelta: 0.05421 });
+            setRegion({ latitude, longitude, latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,});
         })();
     }, []);
 

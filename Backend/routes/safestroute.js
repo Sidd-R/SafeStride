@@ -37,6 +37,7 @@ router.post('', async (req, res) => {
     console.log("Police in this area: ",police);
     index+=8;
     let temp = await calculateSaftey(metro,police,latitude,longitude,startTime,endTime)
+    console.log("risk score: ", Number(temp));
     console.log('----------------------------------------------');
     riskscore += Number(temp)
     waypointcount += 1

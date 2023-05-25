@@ -40,11 +40,10 @@ const App = () => {
     // setUri(uri)
     const { manifest } = Constants;
     const temp = `http://192.168.0.218:3010`;
-    console.log(temp,"kk");
+    // console.log(temp,"kk");
     setUri(temp)
   }
   useEffect(() => {  
-    console.log("whyy");  
     getUri()
   }, [])
   return (

@@ -10,14 +10,42 @@ import Loader from '../components/Loader';
 // const GOOGLE_MAPS_API_KEY='AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
 import { uri } from '../uri';
 import polyline from 'polyline';
+import * as Location from 'expo-location';
 
-const SafestRoute = ({navigation,route}) => {
+export default function SafestRoute ({navigation,route}) {
+  const [source,setSource] = useState({ latitude:19.113645,  longitude:72.8695881 });
+
+ 
+
+  useEffect(() => {
+    const getSafeSpots = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+    
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied');
+        return
+      }
+    
+      let location = await Location.getCurrentPositionAsync({});
+      let { latitude, longitude } = location.coords;
+      setSource({latitude:latitude,longitude:longitude});
+      console.log(latitude,longitude,"ffff");
+      console.log(source,'fffk');
+      setRegion({
+        latitude: latitude,
+        longitude: longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      })
+    }
+    getSafeSpots();
+  }, [])
+  
   const mapRef = useRef(null)
 
   const [selectedRoute, setSelectedRoute] = useState(0)
   const [buttons, setButtons] = useState(['none'])
   const [loading, setLoading] = useState(false)
-  const [source,setSource] = useState({ latitude:19.113645,  longitude:72.8695881 });
   const [destination,setDestination] = useState({ latitude: 19.2009332, longitude: 77.13896183099209 });
   const [sourceAddress,setSourceAddress]=useState("");
   const [destAddress,setDestAddress]=useState("");
@@ -67,13 +95,13 @@ const SafestRoute = ({navigation,route}) => {
       const sourceLocation = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${sourceAddress}&key=${GOOGLE_MAPS_API_KEY}`).then(data => data.data.results[0].geometry.location)
       console.log(sourceLocation);
       setSource({latitude: sourceLocation.lat, longitude: sourceLocation.lng});
-      updateArea()
+      // updateArea()
 
 
       const destinationLocation = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${destAddress}&key=${GOOGLE_MAPS_API_KEY}`).then(data => data.data.results[0].geometry.location)
       setDestination({latitude: destinationLocation.lat, longitude: destinationLocation.lng});
 
-      updateArea()
+      // updateArea()
     } catch (error) {
       console.log(error,'2')
       alert('Location not found')
@@ -82,7 +110,7 @@ const SafestRoute = ({navigation,route}) => {
     }
 
     try {
-      console.log("the source and destination are: ", source, " and ", destination)
+      // console.log("the source and destination are: ", source, " and ", destination)
       let routes = await axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${sourceAddress}&destination=${destAddress}&key=${GOOGLE_MAPS_API_KEY}&alternatives=true`).then(data => data.data.routes);
       routes.forEach((route, routeIndex) => {
         n= routeIndex;
@@ -126,7 +154,7 @@ const SafestRoute = ({navigation,route}) => {
           });
         });
       });
-      console.log(n + 1,routeOverViews.length);
+      // console.log(n + 1,routeOverViews.length);
     } catch (error) {
       console.error(error,3);
       setLoading(false);
@@ -153,13 +181,21 @@ const SafestRoute = ({navigation,route}) => {
             riskScores[i] = Number(riskScores[i])
         })
 
-        riskScores.sort()
+        // riskScores.sort()
 
         if (riskScores.length == 3) setButtons(['route1','route2','route3'])
         else if (riskScores.length == 2) setButtons(['route1','route2'])
         else setButtons(['route1'])
-        console.log('fff',riskScores[0]);
-        if (riskScores[0] > 0.65) {
+        // console.log('fff',riskScores[0]);
+        let min = 1;
+        let index = 0;
+        riskScores.forEach((e,i) => {
+          if (e < min) {
+            min = e;
+            index = i;
+          }
+        })
+        if (riskScores[index] > 0.65) {
           Alert.alert(
             'Warning',
             'The riskscore of the availaible routes is beyond the safety index, It is suggested that you go to a safe spot.',
@@ -173,7 +209,7 @@ const SafestRoute = ({navigation,route}) => {
               {
                 text: 'Proceed',
                 onPress: () => {
-                  navigation.navigate('NSF');
+                  navigation.navigate('NFS');
                 },
               },
             ],
@@ -182,8 +218,8 @@ const SafestRoute = ({navigation,route}) => {
         }
       
 
-        console.log(buttons);
-        console.log(riskScores.length);
+        // console.log(buttons);
+        // console.log(riskScores.length);
         console.log(riskScores);
         setAnswer(riskScores);
         setDispMap(true);
@@ -271,7 +307,7 @@ const SafestRoute = ({navigation,route}) => {
           {
               answer.map((i,j)=>{
                   return(
-                      <Text style={{color:"grey", fontWeight: 'bold'}} key={j}>Route {j}:  {Math.round(i*100)}%</Text>
+                      <Text style={{color:"grey", fontWeight: 'bold'}} key={j}>Route {j+1}:  {Math.round(i*100)}%</Text>
                   )
               })
           }
@@ -325,4 +361,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SafestRoute;
+// export default SafestRoute;

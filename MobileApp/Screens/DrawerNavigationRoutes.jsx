@@ -145,7 +145,6 @@ const SSScreenStack = ({navigation,route}) => {
 };
 
 const DrawerNavigatorRoutes = ({route}) => {
-  console.log(route.params.uri,'hi');
   return (
     <Drawer.Navigator
         screenOptions={{headerShown: false}}

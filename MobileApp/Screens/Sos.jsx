@@ -54,14 +54,15 @@ export default function Sos ({navigation,route}) {
       // const uri = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
       // const uri = 'https://99a5-2409-40c0-6c-4c4f-cd4c-7ec9-5e46-d88e.ngrok-free.app'
       const phone = await AsyncStorage.getItem('phone').then((value) => value);
+      const name = await AsyncStorage.getItem('name').then((value) => value);
       const {uri} = route.params
 
-      await axios.post(uri+'/sos/sms',{latitude:latitude,longitude:longitude,phone:phone}).then(data => console.log(data.data))
+      await axios.post(uri+'/sos/sms',{latitude:latitude,longitude:longitude,phone:phone,name:name}).then(data => console.log(data.data))
                   .catch(err => {
                     console.error(err)
                     alert('sos Failed')
                   })
-      await axios.post(uri+'/sos/call',{phone:phone}).then(data => console.log(data.data))
+      await axios.post(uri+'/sos/call',{phone:phone,name:name}).then(data => console.log(data.data))
                 .catch(err => {
                   console.error(err)
                   alert('sos Failed')
