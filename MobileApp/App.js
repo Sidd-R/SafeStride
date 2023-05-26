@@ -33,15 +33,18 @@ const Auth = () => {
 
 const App = () => {
   const [uri, setUri] = useState(null)
-  const getUri = /*async*/ () => {
-    // const userId = doc(db,'backend','uri')
-    // const user = await getDoc(userId)
-    // const {uri} = user.data();
-    // setUri(uri)
-    const { manifest } = Constants;
-    const temp = `http://192.168.0.218:3010`;
-    // console.log(temp,"kk");
-    setUri(temp)
+  const getUri = async () => {
+    const userId = doc(db,'backend','uri')
+    const user = await getDoc(userId)
+    const {uri} = user.data();
+    setUri(uri)
+    // const { manifest } = Constants;
+    // // const { manifest } = Constants;
+    //   const uriT = `http://${manifest.debuggerHost.split(':').shift()}:3010`;
+    //   console.log(uriT);
+    // // const temp = `http://192.168.0.218:3010`;
+    // // console.log(temp,"kk");
+    // setUri('https://fbad-125-99-120-242.ngrok-free.app')
   }
   useEffect(() => {  
     getUri()

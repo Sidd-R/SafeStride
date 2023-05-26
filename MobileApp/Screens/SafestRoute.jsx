@@ -3,8 +3,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet,Image, View, Dimensions, Text, TextInput, Button, TouchableOpacity, ToggleSButton, Alert, Linking } from 'react-native';
 import {GOOGLE_MAPS_API_KEY} from '@env'
 import axios from 'axios';
-import { LinearGradient } from 'expo-linear-gradient';
-import Constants from "expo-constants";
 import { ButtonGroup } from '@rneui/themed'
 import Loader from '../components/Loader';
 // const GOOGLE_MAPS_API_KEY='AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
@@ -14,7 +12,7 @@ import * as Location from 'expo-location';
 
 export default function SafestRoute ({navigation,route}) {
   const [source,setSource] = useState({ latitude:19.113645,  longitude:72.8695881 });
-
+  const [showMap, setShowMap] = useState(false)
  
 
   useEffect(() => {
@@ -28,18 +26,35 @@ export default function SafestRoute ({navigation,route}) {
     
       let location = await Location.getCurrentPositionAsync({});
       let { latitude, longitude } = location.coords;
-      setSource({latitude:latitude,longitude:longitude});
-      console.log(latitude,longitude,"ffff");
-      console.log(source,'fffk');
+      
       setRegion({
         latitude: latitude,
         longitude: longitude,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       })
+      setSource({latitude:latitude,longitude:longitude});
+      console.log(latitude,longitude,"ffff");
+      console.log(source,'fffk');
+      setLoading(false);
+      setShowMap(true)
     }
     getSafeSpots();
   }, [])
+
+  useEffect(() => {
+    // setLoading(true);
+    setRegion({
+      latitude: source.latitude,
+      longitude: source.longitude,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    })
+    // setLoading(false);
+    setShowMap(true)
+  
+  }, [source])
+  
   
   const mapRef = useRef(null)
 
@@ -62,15 +77,19 @@ export default function SafestRoute ({navigation,route}) {
   let n=0
   let gmapRoutes = ["", "", ""]
 
-  const updateArea = () => {
-    const newRegion ={
-      latitude: source.latitude,
-      longitude: source.longitude,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    }
-    setRegion(newRegion);
-    mapRef.current.animateToRegion(region, 1000);
+  const updateArea = async () => {
+    // setShowMap(false);
+    // console.log('s');
+    // const newRegion ={
+    //   latitude: source.latitude,
+    //   longitude: source.longitude,
+    //   latitudeDelta: 0.0922,
+    //   longitudeDelta: 0.0421,
+    // }
+    // setRegion(newRegion);
+    // // setShowMap(true);
+    // await mapRef.current.animateToRegion(newRegion, 5);
+    // console.log('e');
   }
   
   const openGoogleMaps = (/*startLatitude, startLongitude, endLatitude, endLongitude, waypoints*/e) => {
@@ -82,20 +101,12 @@ export default function SafestRoute ({navigation,route}) {
   
 
   async function changeMap() {
-    setSelectedRoute(0)
-    setDispMap(false)
-    setAnswer([])
-    setWaypoints([])
-    n = 0
-    gmapRoutes = ["","",""]
-    console.log("sourceAddress ",sourceAddress);
-    console.log("destinationAddress",destAddress);
+    
     setLoading(true)
     try {
       const sourceLocation = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${sourceAddress}&key=${GOOGLE_MAPS_API_KEY}`).then(data => data.data.results[0].geometry.location)
       console.log(sourceLocation);
       setSource({latitude: sourceLocation.lat, longitude: sourceLocation.lng});
-      // updateArea()
 
 
       const destinationLocation = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${destAddress}&key=${GOOGLE_MAPS_API_KEY}`).then(data => data.data.results[0].geometry.location)
@@ -108,7 +119,16 @@ export default function SafestRoute ({navigation,route}) {
       setLoading(false);
       return
     }
-
+    await updateArea()
+    setSelectedRoute(0)
+    setDispMap(false)
+    setAnswer([])
+    setWaypoints([])
+    n = 0
+    gmapRoutes = ["","",""]
+    console.log("sourceAddress ",sourceAddress);
+    console.log("destinationAddress",destAddress);
+    // updateArea()
     try {
       // console.log("the source and destination are: ", source, " and ", destination)
       let routes = await axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${sourceAddress}&destination=${destAddress}&key=${GOOGLE_MAPS_API_KEY}&alternatives=true`).then(data => data.data.routes);
@@ -223,6 +243,9 @@ export default function SafestRoute ({navigation,route}) {
         console.log(riskScores);
         setAnswer(riskScores);
         setDispMap(true);
+        await updateArea()
+        setDispMap(false);
+        setDispMap(true)
     }
     catch (error) {
       console.error(error);
@@ -264,12 +287,12 @@ export default function SafestRoute ({navigation,route}) {
         containerStyle={{ marginBottom: 40,marginTop:0, width:"80%",marginLeft:"10%",borderRadius:5,backgroundColor:'white'}}
       />
       </View>:null}
-        
-      <MapView
+      {showMap?<MapView
       ref={mapRef}
         loadingEnabled
         region={region}
         style={styles.map}
+        
         // initialRegion={{
         //   latitude: source.latitude,
         //   longitude: source.longitude,
@@ -300,9 +323,9 @@ export default function SafestRoute ({navigation,route}) {
     {source && <Marker coordinate={source} />}
     {destination && <Marker coordinate={destination} />}
     {/* {routePoints && (<Polyline coordinates={routePoints} strokeColor="#000" strokeWidth={6}/>)} */}
-      </MapView>
-     
-     {dispMap? <View style={{marginBottom: 20, marginLeft: 20, padding:10}}>
+      </MapView>:null}
+
+     {dispMap&&showMap? <View style={{marginBottom: 20, marginLeft: 20, padding:10}}>
           <Text style={{color:"#FF4F63", fontSize: 20}}>The Routes with their riskscores are</Text>
           {
               answer.map((i,j)=>{

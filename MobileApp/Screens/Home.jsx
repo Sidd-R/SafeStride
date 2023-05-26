@@ -28,7 +28,7 @@ export default function Home({ navigation }) {
       </View>
       <View >
       <LinearGradient colors={['#F6A684','#F61956']} start={{x: 0.2, y: 0.2} } style={styles.card}>
-        <TouchableOpacity onPress={() => navigation.navigate('NFS',{navigation})} >
+        <TouchableOpacity onPress={() => navigation.navigate('NFS')} >
           
           <Image source={require('../assets/NearbySafeSpots.png')}
                 style={{
@@ -128,8 +128,9 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   topText:{
-    marginBottom: 10,
+    marginBottom: 20,
     marginLeft: 25,
+    marginTop: 15,
 
   },
   topTextLine1:{

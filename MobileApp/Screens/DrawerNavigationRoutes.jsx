@@ -74,7 +74,7 @@ const SOSScreenStack = ({navigation,route}) => {
         initialParams={{uri:route.params.uri}}
         // initialParams={...props}
         options={{
-          title: 'Settings', //Set Header Title
+          title: 'SOS', //Set Header Title
         }}
       />
     </Stack.Navigator>

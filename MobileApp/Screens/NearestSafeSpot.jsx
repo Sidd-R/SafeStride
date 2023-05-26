@@ -26,12 +26,11 @@ export default function NearestSafeSpot({ navigation }) {
         console.log('Permission to access location was denied');
         return
       }
-      console.log('mid');
       let location = await Location.getCurrentPositionAsync({});
       let { latitude, longitude } = location.coords;
   
       console.log(latitude, longitude);
-  
+      // console.log('mid');  
       // location=19.4065, 72.8338
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${NEARBY_SEARCH_RADIUS}&type=hospital&key=${GOOGLE_MAPS_API_KEY}`
@@ -47,7 +46,7 @@ export default function NearestSafeSpot({ navigation }) {
       });
   
       setHospitals(results);
-      console.log('end');
+      // console.log('end');
     }
     getSafeSpots()
   }, []);
