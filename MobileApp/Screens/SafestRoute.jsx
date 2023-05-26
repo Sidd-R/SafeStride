@@ -6,7 +6,6 @@ import axios from 'axios';
 import { ButtonGroup } from '@rneui/themed'
 import Loader from '../components/Loader';
 // const GOOGLE_MAPS_API_KEY='AIzaSyD5puZeCAKP5CnZxPbhvWIezhWdHfJAwtY';
-import { uri } from '../uri';
 import polyline from 'polyline';
 import * as Location from 'expo-location';
 
