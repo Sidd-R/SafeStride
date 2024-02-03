@@ -3,50 +3,51 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity, ScrollView, Image }
 import * as Location from 'expo-location';
 import axios from 'axios';
 import { LogBox } from 'react-native';
-import {GOOGLE_MAPS_API_KEY} from '@env'
 import { log } from 'react-native-reanimated';
-// const GOOGLE_MAPS_API_KEY='';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
 
-
-
-const NEARBY_SEARCH_RADIUS = 500; // Search radius in meters
+const NEARBY_SEARCH_RADIUS = 500; 
 
 export default function NearestSafeSpot({ navigation }) {
   const [hospitals, setHospitals] = useState([]);
 
   useEffect(() => {
     const getSafeSpots = async () => {
+      console.log("Entered safe spots function")
       let { status } = await Location.requestForegroundPermissionsAsync();
-  
+      console.log(status)
       if (status !== 'granted') {
         console.log('Permission to access location was denied');
         return
       }
       let location = await Location.getCurrentPositionAsync({});
+      console.log(location)
       let { latitude, longitude } = location.coords;
   
       console.log(latitude, longitude);
-      // console.log('mid');  
-      // location=19.4065, 72.8338
-      const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${NEARBY_SEARCH_RADIUS}&type=hospital&key=${GOOGLE_MAPS_API_KEY}`
-      ).then(data => data.data);
+      const response = await axios.post('http://192.168.1.7:3010/nearestsafespot', {
+        latitude: latitude,
+        longitude: longitude,
+      }).then(data => data.data);
+      console.log("sent api request")
+      //console.log(response)
       const results =  []
-      response.results.forEach((result) => {
+      console.log(response[1].name)
+      response.forEach((result) => {
         results.push({
           name: result.name,
           address: result.vicinity,
           latitude: result.geometry.location.lat,
           longitude: result.geometry.location.lng,
         })
+      
       });
-  
+      
       setHospitals(results);
-      // console.log('end');
+      console.log(hospitals);
     }
     getSafeSpots()
   }, []);
@@ -55,8 +56,8 @@ export default function NearestSafeSpot({ navigation }) {
     <View style={styles.container}>
       <Image source={require('../assets/findingNearbySafeSpots.png')}
                 style={{
-                  marginLeft: -40,
-                  marginTop:10,
+                  marginLeft: 30,
+                  marginTop:80,
                   height: 70,
                   width: 400,
                 }}
@@ -76,6 +77,18 @@ export default function NearestSafeSpot({ navigation }) {
           }
         )
       }
+      {/* <TouchableOpacity  style={styles.card}>
+              <Text style={styles.name}>Hostel 18</Text>
+              <Text style={styles.address}>Hostel 18 Rd, Students' Residential Zone, IIT Area, Powai, Mumbai, Maharashtra 400076</Text>
+        </TouchableOpacity>
+        <TouchableOpacity  style={styles.card}>
+              <Text style={styles.name}>SBI ATM Centre</Text>
+              <Text style={styles.address}>Tansa House B Wing, Students' Residential Zone, IIT Area, Powai, Mumbai, Maharashtra 400076</Text>
+        </TouchableOpacity>
+        <TouchableOpacity  style={styles.card}>
+              <Text style={styles.name}>Hostel 17</Text>
+              <Text style={styles.address}>4WM5+PC6, Students' Residential Zone, IIT Area, Powai, Mumbai, Maharashtra 400076</Text>
+        </TouchableOpacity> */}
       </ScrollView>
     </View>
   );
@@ -88,7 +101,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    //paddingTop: 10,
   },
   heading: {
     fontSize: 20,
@@ -104,7 +116,6 @@ const styles = StyleSheet.create({
     color: 'cadetblue',
   },
   card: {
-    // width: '100%',
     marginTop: 5,
     marginLeft: 1,
     marginRight: 1,
@@ -121,21 +132,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   address: {
-    marginBottom: 5,
+    marginBottom: 10,
     marginTop: 5,
+    marginRight: 5,
     fontSize: 11,
     marginLeft: 20
   }
 });
-
-/* 
-      <FlatList
-        data={hospitals}
-        keyExtractor={(item) => item.address}
-        renderItem={({ item }) => (
-          <View style={styles.placeContainer}>
-            <Text style={styles.placeName}>{item.name}</Text>
-            <Text style={styles.placeAddress}>{item.address}</Text>
-          </View>
-        )}
-        */

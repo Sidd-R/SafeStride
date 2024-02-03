@@ -110,10 +110,12 @@ export default function SafestRoute ({navigation,route}) {
 
       const destinationLocation = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${destAddress}&key=${GOOGLE_MAPS_API_KEY}`).then(data => data.data.results[0].geometry.location)
       setDestination({latitude: destinationLocation.lat, longitude: destinationLocation.lng});
-
+      
       // updateArea()
     } catch (error) {
-      console.log(error,'2')
+      console.log(destAddress)
+      console.log(destination)
+      // console.log(error,'2')
       alert('Location not found')
       setLoading(false);
       return

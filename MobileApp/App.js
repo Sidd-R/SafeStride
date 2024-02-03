@@ -7,10 +7,14 @@ import Constants  from 'expo-constants';
 // Import Screens
 import SplashScreen from './Screens/SplashScreen';
 import Login from './Screens/Login';
+import Home from './Screens/Home'
 import Register from './Screens/Register';
 import DrawerNavigationRoutes from './Screens/DrawerNavigationRoutes';
 import { db } from './dbconfig';
-
+import SafestRoute from './Screens/SafestRoute';
+import NearestSafeSpot from './Screens/NearestSafeSpot';
+import Sos from './Screens/Sos'
+import SafetyIndex from './Screens/SafetyIndex'
 const Stack = createNativeStackNavigator();
 
 const Auth = () => {
@@ -21,7 +25,28 @@ const Auth = () => {
         name="Login"
         component={Login}
         options={{headerShown: false}}
-      />
+      /><Stack.Screen
+      name="Home"
+      component={Home}
+      options={{headerShown: false}}
+    />
+  
+    <Stack.Screen
+      name="SafestRoute"
+      component={SafestRoute}
+      options={{headerShown: false}}
+    />
+    <Stack.Screen
+      name="SafetyIndex"
+      component={SafetyIndex}
+      options={{headerShown: false}}
+    />
+    <Stack.Screen
+      name="NFS"
+      component={NearestSafeSpot}
+      options={{headerShown: false}}
+    />
+    
       <Stack.Screen
         name="Register"
         component={Register}

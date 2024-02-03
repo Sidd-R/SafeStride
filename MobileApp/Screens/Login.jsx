@@ -40,23 +40,23 @@ const Login = ({navigation}) => {
       return;
     }
     setLoading(true);
-    const userId = doc(db,'users',userEmail)
-    const user = await getDoc(userId)
-    if (!user.exists()) {
-      alert('User dosen\'t exists')
-      setLoading(false);
-      return
-    } else if (user.data().password != userPassword) {
-      alert('Incorrect password')
-      setLoading(false);
-      return
-    }
-    ToastAndroid.show('Login Successfull',ToastAndroid.SHORT)
-    setLoading(false);
-    const {email,name,phone1} = user.data()
-    await AsyncStorage.setItem('email', email);
-    await AsyncStorage.setItem('name', name);
-    await AsyncStorage.setItem('phone', phone1);
+    // const userId = doc(db,'users',userEmail)
+    // const user = await getDoc(userId)
+    // if (!user.exists()) {
+    //   alert('User dosen\'t exists')
+    //   setLoading(false);
+    //   return
+    // } else if (user.data().password != userPassword) {
+    //   alert('Incorrect password')
+    //   setLoading(false);
+    //   return
+    // }
+    // ToastAndroid.show('Login Successfull',ToastAndroid.SHORT)
+    // setLoading(false);
+    // const {email,name,phone1} = user.data()
+    // await AsyncStorage.setItem('email', email);
+    // await AsyncStorage.setItem('name', name);
+    // await AsyncStorage.setItem('phone', phone1);
     navigation.replace('DrawerNavigationRoutes');
   };
 
@@ -129,7 +129,7 @@ const Login = ({navigation}) => {
              <LinearGradient colors={['#F6A684','#F61956']}  style={styles.buttonStyle}>
             <TouchableOpacity
               activeOpacity={0.5}
-              onPress={handleSubmitPress}>
+              onPress={() => navigation.navigate('Home')}>
               <Text style={styles.buttonTextStyle}>LOGIN</Text>
             </TouchableOpacity>
             </LinearGradient>

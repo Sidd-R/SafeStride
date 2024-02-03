@@ -6,21 +6,28 @@ export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
       <View>
+        <Image source={require('../assets/CampusSafe.png')}
+                style={{
+                  marginTop: 50,
+                  marginLeft: 30,
+                  height: 180,
+                  width: 400,
+                }}
+                />
         <View style={styles.topText}>
           <Text style={styles.topTextLine1}>We admire</Text>
           <Text style={styles.topTextLine2}>Your Strong personality</Text>
         </View>
       <View > 
       <LinearGradient colors={['#F6A684','#F61956']} start={{x: 0.1, y: 0.2} } style={styles.card}>
-        <TouchableOpacity onPress={() => navigation.navigate('Safest Route')}>
+        <TouchableOpacity onPress={() => navigation.navigate('SafetyIndex')}>
          
-          <Image source={require('../assets/SafestRoute.png')}
+          <Image source={require('../assets/SafetyIndex.png')}
                 style={{
-                  marginLeft: -50,
+                  marginLeft: 0,
                   marginTop: 0,
-                 
                   height: 100,
-                  width: 400,
+                  width: 350,
                 }}
                 />
         </TouchableOpacity>
@@ -57,6 +64,23 @@ export default function Home({ navigation }) {
         </TouchableOpacity>
         </View>
         </LinearGradient>
+      </View>
+      <View >
+    
+       <View>
+       <LinearGradient colors={['#F6A684','#F61956']} start={{x: 0.1, y: 0.2} } style={styles.card}>
+        <Image source={require('../assets/Report_Disp.png')}
+                style={{
+                  marginLeft: 0,
+                  marginTop: 0,
+                  height: 100,
+                  width: 350,
+                }}
+                />
+          <Text style={styles.cardTitle}>S O S</Text>
+        </LinearGradient>
+        </View>
+        
       </View>
       {/* <View >
         <Text style={styles.exploreNearby}>Explore Nearby</Text>
@@ -128,8 +152,8 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   topText:{
-    marginBottom: 20,
-    marginLeft: 25,
+    marginBottom: 10,
+    marginLeft: 40,
     marginTop: 15,
 
   },
@@ -143,8 +167,8 @@ const styles = StyleSheet.create({
   card: {
     width: 350,
     height: 100,
-    marginTop: 0,
-    margin: 15,
+    marginTop: 15,
+    marginLeft: 40,
     // marginBottom: 20,
     //borderColor: 'lightgrey',
     borderRadius: 20,
